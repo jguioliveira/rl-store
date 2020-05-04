@@ -1,7 +1,7 @@
 Learning about Identity Server 4
 ======================
 
-xyz xyz xyz
+xyz ``xyz`` xyz
 
 Starting the terminal
 ---------------------
@@ -9,5 +9,5 @@ Starting the terminal
 xyz **xyz** xyz
 
 ```
-$ some some ``$``
+$ some some
 ```
