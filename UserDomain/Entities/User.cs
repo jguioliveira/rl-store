@@ -5,7 +5,7 @@ namespace UserDomain.Entities
     public class User
     {
 
-        private User(string email, string firstName, string lastName, string password)
+        public User(string email, string firstName, string lastName, string password)
         {
             Email = email;
             FirstName = firstName;
@@ -20,6 +20,11 @@ namespace UserDomain.Entities
         public string LastName { get; private set; }
 
         public string Password { get; private set; }
+
+        public bool CheckPassword(string password)
+        {
+            return password == Password;
+        }
 
     }
 }

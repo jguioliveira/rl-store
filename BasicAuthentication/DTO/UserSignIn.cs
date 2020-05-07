@@ -1,6 +1,6 @@
-namespace BasicAuthentication.Model.DTO
+namespace BasicAuthentication.DTO
 {
-    public class User
+    public class UserSignIn
     {
         public string Email { get; set; }
         public string Password { get; set; }

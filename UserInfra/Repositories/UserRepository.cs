@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using System.Threading.Tasks;
 using UserDomain.Entities;
 using UserDomain.Repositories;
 using UserInfra.Context;
@@ -15,20 +16,20 @@ namespace UserInfra.Repositories
             _dataContext = dataContext;
         }
 
-        public bool UserExists(string email)
+        public async Task<bool> UserExists(string email)
         {
-            var user = GetByEmail(email);
+            var user = await GetByEmail(email);
             return !(user is null);
         }
 
-        public void CreateUser(User user)
+        public async Task CreateUserAsync(User user)
         {
-            _dataContext.DataCollection.InsertOne(user);
+            await _dataContext.DataCollection.InsertOneAsync(user);
         }
         
-        public User GetByEmail(string email)
+        public async Task<User> GetByEmail(string email)
         {
-            return _dataContext.DataCollection.Find(user => user.Email == email).SingleOrDefault();
+            return await _dataContext.DataCollection.Find(user => user.Email == email).SingleOrDefaultAsync();
         }
         
     }

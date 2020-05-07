@@ -1,11 +1,12 @@
+using System.Threading.Tasks;
 using UserDomain.Entities;
 
 namespace UserDomain.Repositories
 {
     public interface IUserRepository
     {
-        bool UserExists(string email);
-        void CreateUser(User user);
-        User GetByEmail(string email);
+        Task<bool> UserExists(string email);
+        Task CreateUserAsync(User user);
+        Task<User> GetByEmail(string email);
     }
 }
