@@ -1,0 +1,12 @@
+version: '3.1'
+    services: 
+        mongo:
+            image: mongo
+            environment: 
+                MONGO_INITDB_ROOT_USERNAME:admin
+                MONGO_INITDB_ROOT_PASSWORD:admin@12345
+            volumes: 
+                - mongodb-data:/data/db
+    
+    volumes: 
+        mongodb-data:
