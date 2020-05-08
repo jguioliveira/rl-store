@@ -26,6 +26,11 @@ namespace BasicAuthentication.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(UserSignIn userData)
         {
+            string mensagem = string.Empty;
+            try
+            {
+
+           
             var user = await _userRepository.GetByEmail(userData.Email);
 
             if(!(user is null) && user.CheckPassword(userData.Password))
@@ -70,7 +75,14 @@ namespace BasicAuthentication.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return View();
+            }
+            catch (Exception ex)
+            {
+                mensagem = ex.Message;
+                throw;
+            }
+
+            return RedirectToAction("Index", mensagem);
         }
     }
 }

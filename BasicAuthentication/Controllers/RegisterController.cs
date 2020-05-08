@@ -21,7 +21,7 @@ namespace BasicAuthentication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(NewUser newUser)
+        public async Task<IActionResult> Index(NewUser newUser)
         {
             var user = new User(newUser.Email, newUser.FirstName, newUser.LastName, newUser.Password);
 

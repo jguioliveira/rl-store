@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace UserInfra.Context
@@ -6,11 +7,11 @@ namespace UserInfra.Context
     {
         public IMongoCollection<TEntity> DataCollection { get; private set; }
 
-        public UserDataContext(IDatabaseSettings settings)
+        public UserDataContext(IOptions<DatabaseSettings> settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
-            DataCollection = database.GetCollection<TEntity>(nameof(TEntity));
+            var client = new MongoClient(settings.Value.ConnectionString);
+            var database = client.GetDatabase(settings.Value.DatabaseName);
+            DataCollection = database.GetCollection<TEntity>("User");
         }
 
     }

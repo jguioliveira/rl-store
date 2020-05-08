@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UserDomain\UserDomain.csproj" />
+    <ProjectReference Include="..\UserInfra\UserInfra.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

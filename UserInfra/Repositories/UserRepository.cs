@@ -1,4 +1,6 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Linq;
 using System.Threading.Tasks;
 using UserDomain.Entities;
 using UserDomain.Repositories;
@@ -26,11 +28,24 @@ namespace UserInfra.Repositories
         {
             await _dataContext.DataCollection.InsertOneAsync(user);
         }
-        
+
         public async Task<User> GetByEmail(string email)
         {
-            return await _dataContext.DataCollection.Find(user => user.Email == email).SingleOrDefaultAsync();
+            try
+            {
+                var todos = await _dataContext.DataCollection.Find(new BsonDocument()).ToListAsync();
+                var filter = Builders<User>.Filter.Eq("email", email);
+                return await _dataContext.DataCollection
+                                     .Find(filter)
+                                     .SingleOrDefaultAsync();
+            }
+            catch (System.Exception ex)
+            {
+                string erro = ex.Message;
+            }
+
+            return null;
         }
-        
+
     }
 }

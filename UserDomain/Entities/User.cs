@@ -1,9 +1,14 @@
-using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace UserDomain.Entities
 {
     public class User
     {
+        public User()
+        {
+
+        }
 
         public User(string email, string firstName, string lastName, string password)
         {
@@ -13,13 +18,21 @@ namespace UserDomain.Entities
             Password = password;
         }
 
-        public string Email { get; private set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
-        public string FirstName { get; private set; }
+        [BsonElement("email")]
+        public string Email { get; set; }
 
-        public string LastName { get; private set; }
+        [BsonElement("firstName")]
+        public string FirstName { get; set; }
 
-        public string Password { get; private set; }
+        [BsonElement("lastName")]
+        public string LastName { get; set; }
+
+        [BsonElement("password")]
+        public string Password { get; set; }
 
         public bool CheckPassword(string password)
         {
