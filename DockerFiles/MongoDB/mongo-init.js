@@ -10,3 +10,5 @@ db.createUser(
         ]
     }
 );
+
+db.User.insertOne({ email: "jose@gmail.com", firstName: "Jose", lastName: "Oliveira", password: "123456" } );
