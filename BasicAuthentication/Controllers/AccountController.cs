@@ -2,26 +2,22 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BasicAuthentication.Domain.Entities;
+using BasicAuthentication.Domain.Repositories;
 using BasicAuthentication.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using UserDomain.Entities;
-using UserDomain.Repositories;
 
 namespace BasicAuthentication.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
 
         public AccountController(
-            UserManager<User> userManager,
             IUserRepository userRepository)
         {
-            _userManager = userManager;
             _userRepository = userRepository;
         }
 

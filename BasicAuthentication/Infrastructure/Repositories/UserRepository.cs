@@ -1,10 +1,10 @@
+using BasicAuthentication.Domain.Entities;
+using BasicAuthentication.Domain.Repositories;
+using BasicAuthentication.Infrastructure.Context;
 using MongoDB.Driver;
 using System.Threading.Tasks;
-using UserDomain.Entities;
-using UserDomain.Repositories;
-using UserInfra.Context;
 
-namespace UserInfra.Repositories
+namespace BasicAuthentication.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {

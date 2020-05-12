@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 
-namespace UserInfra.Context
+namespace BasicAuthentication.Infrastructure.Context
 {
     public interface IUserDataContext<TEntity> where TEntity : class
     {

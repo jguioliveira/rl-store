@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace UserInfra.Context
+namespace BasicAuthentication.Infrastructure.Context
 {
     public class UserDataContext<TEntity> : IUserDataContext<TEntity> where TEntity : class
     {

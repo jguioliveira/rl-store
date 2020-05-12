@@ -1,4 +1,4 @@
-namespace UserInfra.Context
+namespace BasicAuthentication.Infrastructure.Context
 {
     public class DatabaseSettings
     {

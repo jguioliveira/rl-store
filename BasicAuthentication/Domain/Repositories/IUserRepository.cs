@@ -1,7 +1,7 @@
+using BasicAuthentication.Domain.Entities;
 using System.Threading.Tasks;
-using UserDomain.Entities;
 
-namespace UserDomain.Repositories
+namespace BasicAuthentication.Domain.Repositories
 {
     public interface IUserRepository
     {
