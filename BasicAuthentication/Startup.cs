@@ -36,7 +36,7 @@ namespace BasicAuthentication
             })
             .AddCookie("BasicAuth", options => {
                 options.Cookie.Name = "BasicAuth.Cookie";
-                options.LoginPath = "/Login/";
+                options.LoginPath = "/Account/Login";
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
@@ -50,6 +50,8 @@ namespace BasicAuthentication
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 
