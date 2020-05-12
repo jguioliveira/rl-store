@@ -1,8 +1,9 @@
-namespace BasicAuthentication.DTO
+namespace BasicAuthentication.ViewModel
 {
     public class UserSignIn
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public bool RememberMe { get; set; }
     }
 }

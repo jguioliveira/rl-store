@@ -1,4 +1,4 @@
-namespace BasicAuthentication.DTO
+namespace BasicAuthentication.ViewModel
 {
     public class NewUser
     {

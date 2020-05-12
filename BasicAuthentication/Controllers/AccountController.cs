@@ -1,32 +1,44 @@
-using BasicAuthentication.DTO;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BasicAuthentication.ViewModel;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using UserDomain.Entities;
 using UserDomain.Repositories;
 
 namespace BasicAuthentication.Controllers
 {
-    public class LoginController : Controller
+    public class AccountController : Controller
     {
+        private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
 
-        public LoginController(IUserRepository userRepository)
+        public AccountController(
+            UserManager<User> userManager,
+            IUserRepository userRepository)
         {
+            _userManager = userManager;
             _userRepository = userRepository;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SignIn(UserSignIn userData)
+        public IActionResult Login()
         {
+            return View();
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> Login(UserSignIn userData)
+        {
             var user = await _userRepository.GetByEmail(userData.Email);
 
             if (!(user is null) && user.CheckPassword(userData.Password))
@@ -49,7 +61,7 @@ namespace BasicAuthentication.Controllers
                     // value set here overrides the ExpireTimeSpan option of 
                     // CookieAuthenticationOptions set with AddCookie.
 
-                    IsPersistent = true,
+                    IsPersistent = userData.RememberMe,
                     // Whether the authentication session is persisted across 
                     // multiple requests. When used with cookies, controls
                     // whether the cookie's lifetime is absolute (matching the
@@ -58,7 +70,7 @@ namespace BasicAuthentication.Controllers
                     IssuedUtc = DateTimeOffset.UtcNow,
                     // The time at which the authentication ticket was issued.
 
-                    RedirectUri = "/Login/"
+                    RedirectUri = "/Account/Login"
                     // The full path or absolute URI to be used as an http 
                     // redirect response value.
                 };
@@ -68,10 +80,30 @@ namespace BasicAuthentication.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index");
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(NewUser newUser)
+        {
+            var user = new User(newUser.Email, newUser.FirstName, newUser.LastName, newUser.Password);
+
+            await _userRepository.CreateUserAsync(user);
+
+            return RedirectToAction("SendEmailConfirmation");
+        }
+
+        public IActionResult SendEmailConfirmation()
+        {
+            return View();
         }
     }
 }
