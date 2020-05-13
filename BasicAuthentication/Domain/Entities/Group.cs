@@ -8,9 +8,12 @@ namespace BasicAuthentication.Domain.Entities
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
 
-        [BsonElement("modules")]
-        public IEnumerable<ObjectId> Modules { get; set; }
+        [BsonElement("name")]
+        public string Name { get; set; }
+
+        [BsonElement("permissionModules")]
+        public IEnumerable<ObjectId> PermissionModules { get; set; }
     }
 }

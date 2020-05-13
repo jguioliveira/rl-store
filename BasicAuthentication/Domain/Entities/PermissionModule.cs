@@ -1,15 +1,17 @@
-﻿using MongoDB.Bson;
+﻿using BasicAuthentication.Domain.ValueObjects;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace BasicAuthentication.Domain.Entities
 {
-    public class Module
+    public class PermissionModule
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
 
-        [BsonElement("name")]
-        public string Name { get; set; }
+        public ObjectId ModuleId { get; set; }
+
+        public Permission Permission { get; set; }
     }
 }
