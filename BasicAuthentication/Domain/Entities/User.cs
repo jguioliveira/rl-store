@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -15,7 +16,7 @@ namespace BasicAuthentication.Domain.Entities
             Email = email;
             FirstName = firstName;
             LastName = lastName;
-            Password = password;
+            Password = EncriptyPassword(password);
         }
 
         [BsonId]
@@ -36,8 +37,14 @@ namespace BasicAuthentication.Domain.Entities
 
         public bool CheckPassword(string password)
         {
-            return password == Password;
+            PasswordHasher<User> passwordHasher = new PasswordHasher<User>();
+            return passwordHasher.VerifyHashedPassword(this, Password, password) != PasswordVerificationResult.Failed;           
         }
 
+        private string EncriptyPassword(string password)
+        {
+            PasswordHasher<User> passwordHasher = new PasswordHasher<User>();
+            return passwordHasher.HashPassword(this, password);
+        }
     }
 }
