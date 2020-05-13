@@ -35,11 +35,11 @@ namespace BasicAuthentication
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient(typeof(IUserDataContext<>), typeof(UserDataContext<>));
+            services.AddTransient<IUserDataContext, UserDataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IUserDataContext userDataContext)
         {
             if (env.IsDevelopment())
             {
@@ -57,6 +57,9 @@ namespace BasicAuthentication
             {
                 endpoints.MapDefaultControllerRoute();
             });
+
+            UserDataContextSeed.SeedAsync(userDataContext)
+                .Wait();
         }
     }
 }

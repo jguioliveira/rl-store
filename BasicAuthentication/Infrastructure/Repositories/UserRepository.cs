@@ -9,9 +9,9 @@ namespace BasicAuthentication.Infrastructure.Repositories
     public class UserRepository : IUserRepository
     {
 
-        private readonly IUserDataContext<User> _dataContext;
+        private readonly IUserDataContext _dataContext;
 
-        public UserRepository(IUserDataContext<User> dataContext)
+        public UserRepository(IUserDataContext dataContext)
         {
             _dataContext = dataContext;
         }
@@ -24,13 +24,13 @@ namespace BasicAuthentication.Infrastructure.Repositories
 
         public async Task CreateUserAsync(User user)
         {
-            await _dataContext.DataCollection.InsertOneAsync(user);
+            await _dataContext.Users.InsertOneAsync(user);
         }
 
         public async Task<User> GetByEmail(string email)
         {
             var filter = Builders<User>.Filter.Eq("email", email);
-            return await _dataContext.DataCollection
+            return await _dataContext.Users
                                  .Find(filter)
                                  .SingleOrDefaultAsync();
 

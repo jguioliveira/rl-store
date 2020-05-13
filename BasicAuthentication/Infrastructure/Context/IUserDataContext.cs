@@ -1,9 +1,13 @@
+using BasicAuthentication.Domain.Entities;
 using MongoDB.Driver;
 
 namespace BasicAuthentication.Infrastructure.Context
 {
-    public interface IUserDataContext<TEntity> where TEntity : class
+    public interface IUserDataContext
     {
-        IMongoCollection<TEntity> DataCollection { get; }
+        IMongoCollection<User> Users { get; }
+        IMongoCollection<Module> Modules { get; }
+        IMongoCollection<PermissionModule> PermissionModules { get; }
+        IMongoCollection<Group> Groups { get; }
     }
 }
