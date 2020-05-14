@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace BasicAuthentication.Domain.Entities
@@ -36,6 +35,9 @@ namespace BasicAuthentication.Domain.Entities
 
         [BsonElement("password")]
         public string Password { get; set; }
+
+        [BsonElement("active")]
+        public bool Active { get; set; }
 
         [BsonElement("groups")]
         public IEnumerable<ObjectId> Groups { get; set; }
