@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "User Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model BasicAuthentication.ViewModel.UserManagement.Index
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div class="container">
+    <h1>User Management</h1>
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Email</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <th scope="row">
+                        <a asp-action="Edit" asp-route-id="@user.Id">@user.Id</a>
+                    </th>
+                    <td>@Html.DisplayFor(modelItem => user.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => user.FirstName)</td>
+                    <td>@Html.DisplayFor(modelItem => user.LastName)</td>
+                    <td>@Html.DisplayFor(modelItem => user.Active)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
