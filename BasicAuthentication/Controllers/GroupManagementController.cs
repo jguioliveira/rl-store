@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BasicAuthentication.Controllers
 {
-    public class GroupController : Controller
+    public class GroupManagementController : Controller
     {
         public IActionResult Index()
         {
