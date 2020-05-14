@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BasicAuthentication.Controllers
 {
-    public class ModuleController : Controller
+    public class ModuleManagementController : Controller
     {
         private readonly IModuleRepository _moduleRepository;
 
-        public ModuleController(IModuleRepository moduleRepository)
+        public ModuleManagementController(IModuleRepository moduleRepository)
         {
             _moduleRepository = moduleRepository;
         }
