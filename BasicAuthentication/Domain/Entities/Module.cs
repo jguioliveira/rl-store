@@ -11,5 +11,8 @@ namespace BasicAuthentication.Domain.Entities
 
         [BsonElement("name")]
         public string Name { get; set; }
+
+        [BsonElement("active")]
+        public bool Active { get; set; }
     }
 }
