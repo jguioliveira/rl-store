@@ -2,6 +2,7 @@ using BasicAuthentication.Domain.Entities;
 using BasicAuthentication.Domain.Repositories;
 using BasicAuthentication.Infrastructure.Context;
 using MongoDB.Driver;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BasicAuthentication.Infrastructure.Repositories
@@ -16,9 +17,9 @@ namespace BasicAuthentication.Infrastructure.Repositories
             _dataContext = dataContext;
         }
 
-        public async Task<bool> UserExists(string email)
+        public async Task<bool> UserExistsAsync(string email)
         {
-            var user = await GetByEmail(email);
+            var user = await GetByEmailAsync(email);
             return !(user is null);
         }
 
@@ -27,13 +28,18 @@ namespace BasicAuthentication.Infrastructure.Repositories
             await _dataContext.Users.InsertOneAsync(user);
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             var filter = Builders<User>.Filter.Eq("email", email);
             return await _dataContext.Users
                                  .Find(filter)
                                  .SingleOrDefaultAsync();
 
+        }
+
+        public async Task<IEnumerable<User>> GetAsync()
+        {
+            return await _dataContext.Users.AsQueryable().ToListAsync();
         }
     }
 }
