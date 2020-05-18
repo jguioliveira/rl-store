@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using BasicAuthentication.Domain.Entities;
 using BasicAuthentication.Domain.Repositories;
 using BasicAuthentication.ViewModel.UserManagement;
 using Microsoft.AspNetCore.Mvc;
@@ -33,8 +34,30 @@ namespace BasicAuthentication.Controllers
             return View(indexModel);
         }
 
+        public IActionResult New()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> New(NewUser newUser)
+        {
+            var user = new User(newUser.Email, newUser.FirstName, newUser.LastName, newUser.Password, newUser.Active);
+
+            await _userRepository.CreateUserAsync(user);
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> Edit(string id)
         {            
+            
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, NewUser newUser)
+        {
 
             return View();
         }
