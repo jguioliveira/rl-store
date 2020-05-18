@@ -24,7 +24,7 @@ namespace BasicAuthentication.Infrastructure.Repositories
 
         public async Task<Module> GetAsync(string id)
         {
-            var filter = Builders<Module>.Filter.Eq("id", id);
+            var filter = Builders<Module>.Filter.Eq("Id", id);
             return await _userDataContext.Modules.Find(filter).SingleOrDefaultAsync();
         }
 
@@ -33,9 +33,9 @@ namespace BasicAuthentication.Infrastructure.Repositories
             return await _userDataContext.Modules.AsQueryable().ToListAsync();
         }
 
-        public async Task UpdateAsync(Module module)
+        public async Task UpdateAsync(string id, Module module)
         {
-            var filter = Builders<Module>.Filter.Eq("id", module.Id);
+            var filter = Builders<Module>.Filter.Eq("Id", id);
 
             var updateDefinition = Builders<Module>.Update
                 .Set("name", module.Name)
