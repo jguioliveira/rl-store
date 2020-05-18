@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using BasicAuthentication.Domain.ValueObjects;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 
@@ -14,6 +15,6 @@ namespace BasicAuthentication.Domain.Entities
         public string Name { get; set; }
 
         [BsonElement("permissionModules")]
-        public IEnumerable<ObjectId> PermissionModules { get; set; }
+        public IEnumerable<PermissionModule> PermissionModules { get; set; }
     }
 }
