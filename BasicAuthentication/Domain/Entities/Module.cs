@@ -5,9 +5,19 @@ namespace BasicAuthentication.Domain.Entities
 {
     public class Module
     {
+        public Module()
+        {
+        }
+
+        public Module(string name, bool active)
+        {
+            Name = name;
+            Active = active;
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
 
         [BsonElement("name")]
         public string Name { get; set; }

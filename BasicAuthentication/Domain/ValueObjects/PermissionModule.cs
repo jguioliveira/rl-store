@@ -4,7 +4,7 @@ namespace BasicAuthentication.Domain.ValueObjects
 {
     public class PermissionModule
     {
-        public ObjectId ModuleId { get; set; }
+        public string ModuleId { get; set; }
 
         public Permission Permission { get; set; }
     }
