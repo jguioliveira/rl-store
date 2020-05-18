@@ -1,3 +1,4 @@
+using AspNetCore;
 using BasicAuthentication.Domain.Entities;
 using BasicAuthentication.Domain.Repositories;
 using BasicAuthentication.Infrastructure.Context;
@@ -40,6 +41,27 @@ namespace BasicAuthentication.Infrastructure.Repositories
         public async Task<IEnumerable<User>> GetAsync()
         {
             return await _dataContext.Users.AsQueryable().ToListAsync();
+        }
+
+        public async Task<User> GetByIdAsync(string id)
+        {
+            var filter = Builders<User>.Filter.Eq("id", id);
+            return await _dataContext.Users
+                                 .Find(filter)
+                                 .SingleOrDefaultAsync();
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            var filter = Builders<User>.Filter.Eq("id", user.Id);
+            var updateDefinition = Builders<User>
+                .Update
+                .Set(u => u.FirstName, user.FirstName)
+                .Set(u => u.LastName, user.LastName)
+                .Set(u => u.Password, user.Password)
+                .Set(u => u.Active, user.Active);
+
+            await _dataContext.Users.UpdateOneAsync(filter, updateDefinition);
         }
     }
 }
