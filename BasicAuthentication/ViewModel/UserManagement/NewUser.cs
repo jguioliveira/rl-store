@@ -1,4 +1,4 @@
-namespace BasicAuthentication.ViewModel
+namespace BasicAuthentication.ViewModel.UserManagement
 {
     public class NewUser
     {
