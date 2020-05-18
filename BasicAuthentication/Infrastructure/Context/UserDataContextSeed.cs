@@ -26,9 +26,9 @@ namespace BasicAuthentication.Infrastructure.Context
         {
             IEnumerable<Module> modules = new List<Module>
             {
-                new Module{ Name = "User Management"},
-                new Module{ Name = "Account and Finance"},
-                new Module{ Name = "Purchasing"}
+                new Module{ Name = "User Management", Active = true},
+                new Module{ Name = "Account and Finance", Active = true},
+                new Module{ Name = "Purchasing", Active = true}
             };
 
             await _userDataContext.Modules.InsertManyAsync(modules);
