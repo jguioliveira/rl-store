@@ -14,6 +14,6 @@ namespace BasicAuthentication.Domain.Repositories
 
         Task CreateAsync(Module module);
 
-        Task UpdateAsync(Module module);
+        Task UpdateAsync(string id, Module module);
     }
 }
