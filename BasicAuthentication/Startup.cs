@@ -36,6 +36,7 @@ namespace BasicAuthentication
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IModuleRepository, ModuleRepository>();
+            services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<IUserDataContext, UserDataContext>();
         }
 
