@@ -50,16 +50,29 @@ namespace BasicAuthentication.Controllers
         }
 
         public async Task<IActionResult> Edit(string id)
-        {            
-            
-            return View();
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            NewUser newUser = new NewUser
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Password = user.Password,
+                Active = user.Active,
+            };
+
+            return View(newUser);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, NewUser newUser)
+        public async Task<IActionResult> Edit([FromRoute] string id, NewUser newUser)
         {
+            var user = new User(newUser.Email, newUser.FirstName, newUser.LastName, newUser.Password, newUser.Active);
 
-            return View();
+            await _userRepository.UpdateAsync(id, user);
+
+            return RedirectToAction("Index");
         }
     }
 }

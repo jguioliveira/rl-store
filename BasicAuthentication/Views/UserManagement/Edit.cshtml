@@ -4,5 +4,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+@model BasicAuthentication.ViewModel.UserManagement.NewUser
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
+<div class="container">
+    <h3>Edit User</h3>
+    <form method="post">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>First Name</label>
+                @Html.TextBoxFor(u => u.FirstName, new { Class = "form-control" })
+            </div>
+            <div class="form-group col-md-6">
+                <label>Last Name</label>
+                @Html.TextBoxFor(u => u.LastName, new { Class = "form-control" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Email</label>
+                @Html.TextBoxFor(u => u.Email, new { Class = "form-control", type = "email", @readonly = "readonly" })
+            </div>
+            <div class="form-group col-md-6">
+                <label>Password</label>
+                @Html.TextBoxFor(u => u.Password, new { Class = "form-control", type = "password" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                @Html.CheckBoxFor(u => u.Active, new { Class = "form-check-input" })
+                <label for="Active" class="form-check-label">Active</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
