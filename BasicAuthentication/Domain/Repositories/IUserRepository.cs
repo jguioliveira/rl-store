@@ -8,7 +8,7 @@ namespace BasicAuthentication.Domain.Repositories
     {
         Task<bool> UserExistsAsync(string email);
         Task CreateUserAsync(User user);
-        Task<User> GetByEmailAsync(string email);
+        Task<User> GetAsync(string email);
         Task<IEnumerable<User>> GetAsync();
     }
 }

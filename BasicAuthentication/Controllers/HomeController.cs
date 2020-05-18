@@ -34,7 +34,7 @@ namespace BasicAuthentication.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(UserSignIn userData)
         {
-            var user = await _userRepository.GetByEmailAsync(userData.Email);
+            var user = await _userRepository.GetAsync(userData.Email);
 
             if (!(user is null) && user.CheckPassword(userData.Password))
             {

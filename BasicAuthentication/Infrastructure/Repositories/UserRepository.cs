@@ -19,7 +19,7 @@ namespace BasicAuthentication.Infrastructure.Repositories
 
         public async Task<bool> UserExistsAsync(string email)
         {
-            var user = await GetByEmailAsync(email);
+            var user = await GetAsync(email);
             return !(user is null);
         }
 
@@ -28,7 +28,7 @@ namespace BasicAuthentication.Infrastructure.Repositories
             await _dataContext.Users.InsertOneAsync(user);
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetAsync(string email)
         {
             var filter = Builders<User>.Filter.Eq("email", email);
             return await _dataContext.Users
