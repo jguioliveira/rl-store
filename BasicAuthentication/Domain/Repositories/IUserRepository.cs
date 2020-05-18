@@ -11,6 +11,6 @@ namespace BasicAuthentication.Domain.Repositories
         Task<User> GetAsync(string email);
         Task<IEnumerable<User>> GetAsync();
         Task<User> GetByIdAsync(string id);
-        Task UpdateAsync(User user);
+        Task UpdateAsync(string id, User user);
     }
 }

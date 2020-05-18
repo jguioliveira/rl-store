@@ -1,4 +1,3 @@
-using AspNetCore;
 using BasicAuthentication.Domain.Entities;
 using BasicAuthentication.Domain.Repositories;
 using BasicAuthentication.Infrastructure.Context;
@@ -45,15 +44,15 @@ namespace BasicAuthentication.Infrastructure.Repositories
 
         public async Task<User> GetByIdAsync(string id)
         {
-            var filter = Builders<User>.Filter.Eq("id", id);
+            var filter = Builders<User>.Filter.Eq("Id", id);
             return await _dataContext.Users
                                  .Find(filter)
                                  .SingleOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(string id, User user)
         {
-            var filter = Builders<User>.Filter.Eq("id", user.Id);
+            var filter = Builders<User>.Filter.Eq("Id", id);
             var updateDefinition = Builders<User>
                 .Update
                 .Set(u => u.FirstName, user.FirstName)
