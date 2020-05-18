@@ -12,12 +12,13 @@ namespace BasicAuthentication.Domain.Entities
 
         }
 
-        public User(string email, string firstName, string lastName, string password)
+        public User(string email, string firstName, string lastName, string password, bool active)
         {
             Email = email;
             FirstName = firstName;
             LastName = lastName;
             Password = EncriptyPassword(password);
+            Active = active;
         }
 
         [BsonId]

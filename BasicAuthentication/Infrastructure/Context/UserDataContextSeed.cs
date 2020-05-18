@@ -72,7 +72,7 @@ namespace BasicAuthentication.Infrastructure.Context
 
         static async Task CreateUser(Group group)
         {
-            User user = new User("admin@company.com", "Super", "Admin", "admin@15")
+            User user = new User("admin@company.com", "Super", "Admin", "admin@15", true)
             {
                 Groups = new List<ObjectId> { group.Id }
             };
