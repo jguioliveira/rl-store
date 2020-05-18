@@ -8,28 +8,30 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 
-<div class="container">
-    <h3>Modules Management</h3>
-
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Active</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var module in Model.Modules)
-            {
+    <div class="container">
+        <h3>Modules Management</h3>
+        <div class="pb-3">
+            <a asp-action="New" class="btn btn-primary">New Module</a>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
                 <tr>
-                    <th scope="row">
-                        <a asp-action="Edit" asp-route-id="@module.Id">@module.Id</a>
-                    </th>
-                    <td>@Html.DisplayFor(modelItem => module.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => module.Active)</td>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Active</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var module in Model.Modules)
+                {
+                    <tr>
+                        <th scope="row">
+                            <a asp-action="Edit" asp-route-id="@module.Id">@module.Id</a>
+                        </th>
+                        <td>@Html.DisplayFor(modelItem => module.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => module.Active)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
