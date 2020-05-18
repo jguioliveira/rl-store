@@ -24,21 +24,6 @@ namespace BasicAuthentication.Controllers
             return View();
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Register(NewUser newUser)
-        {
-            var user = new User(newUser.Email, newUser.FirstName, newUser.LastName, newUser.Password);
-
-            await _userRepository.CreateUserAsync(user);
-
-            return RedirectToAction("SendEmailConfirmation");
-        }
-
         public async Task<IActionResult> SignOut()
         {
             await HttpContext.SignOutAsync("BasicAuth");
