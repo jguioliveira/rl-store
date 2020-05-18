@@ -20,11 +20,6 @@ namespace BasicAuthentication.Infrastructure.Context
             {
                 await CreateModulesAsync();
             }
-
-            //if (!_userDataContext.Modules.AsQueryable().Any())
-            //{
-            //    await CreateModulesAsync();
-            //}
         }
 
         static async Task CreateModulesAsync()
@@ -42,14 +37,14 @@ namespace BasicAuthentication.Infrastructure.Context
 
         static async Task CreateGroupsAsync(IEnumerable<Module> modules)
         {
-            PermissionModule permissionModule = await CreatePermissionModule(modules.FirstOrDefault(m => m.Name == "User Management"));
+            PermissionModule permissionModule = CreatePermissionModule(modules.FirstOrDefault(m => m.Name == "User Management"));
 
             Group group = new Group
             {
                 Name = "SuperUser",
-                PermissionModules = new List<ObjectId>
+                PermissionModules = new List<PermissionModule>
                 {
-                    permissionModule.Id
+                    permissionModule
                 }
             };
 
@@ -58,7 +53,7 @@ namespace BasicAuthentication.Infrastructure.Context
             await CreateUser(group);
         }
 
-        static async Task<PermissionModule> CreatePermissionModule(Module module)
+        static PermissionModule CreatePermissionModule(Module module)
         {
             PermissionModule permissionModule = new PermissionModule
             {
@@ -72,7 +67,6 @@ namespace BasicAuthentication.Infrastructure.Context
                 }
             };
 
-            await _userDataContext.PermissionModules.InsertOneAsync(permissionModule);
             return permissionModule;
         }
 

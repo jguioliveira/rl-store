@@ -18,8 +18,6 @@ namespace BasicAuthentication.Infrastructure.Context
 
         public IMongoCollection<Module> Modules => _database.GetCollection<Module>(nameof(Module));
 
-        public IMongoCollection<PermissionModule> PermissionModules => _database.GetCollection<PermissionModule>(nameof(PermissionModule));
-
         public IMongoCollection<Group> Groups => _database.GetCollection<Group>(nameof(Group));
     }
 }
