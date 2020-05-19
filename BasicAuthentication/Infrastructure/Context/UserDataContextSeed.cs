@@ -74,7 +74,7 @@ namespace BasicAuthentication.Infrastructure.Context
         {
             User user = new User("admin@company.com", "Super", "Admin", "admin@15", true)
             {
-                Groups = new List<ObjectId> { group.Id }
+                Groups = new List<string> { group.Id }
             };
 
             await _userDataContext.Users.InsertOneAsync(user);
