@@ -9,6 +9,6 @@ namespace BasicAuthentication.Domain.Repositories
         Task<Group> GetAsync(string id);
         Task<IEnumerable<Group>> GetAsync();
         Task CreateAsync(Group group);
-        Task UpdateAsync(Group group);
+        Task UpdateAsync(string id, Group group);
     }
 }

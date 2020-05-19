@@ -24,7 +24,7 @@ namespace BasicAuthentication.Infrastructure.Repositories
 
         public async Task<Group> GetAsync(string id)
         {
-            var filter = Builders<Group>.Filter.Eq("id", id);
+            var filter = Builders<Group>.Filter.Eq("Id", id);
             return await _userDataContext.Groups.Find(filter).SingleOrDefaultAsync();
         }
 
@@ -33,9 +33,9 @@ namespace BasicAuthentication.Infrastructure.Repositories
             return await _userDataContext.Groups.AsQueryable().ToListAsync();
         }
 
-        public async Task UpdateAsync(Group group)
+        public async Task UpdateAsync(string id, Group group)
         {
-            var filter = Builders<Group>.Filter.Eq("id", group.Id);
+            var filter = Builders<Group>.Filter.Eq("Id", id);
             var updateDefinition = Builders<Group>
                 .Update
                 .Set(g => g.Name, group.Name)
