@@ -2,16 +2,12 @@ using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace BasicAuthentication.Domain.Entities
 {
     public class User
     {
-        public User()
-        {
-
-        }
-
         public User(string email, string firstName, string lastName, string password, bool active)
         {
             Email = email;
@@ -23,25 +19,27 @@ namespace BasicAuthentication.Domain.Entities
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [BsonElement("email")]
-        public string Email { get; set; }
+        public string Email { get; private set; }
 
         [BsonElement("firstName")]
-        public string FirstName { get; set; }
+        public string FirstName { get; private set; }
 
         [BsonElement("lastName")]
-        public string LastName { get; set; }
+        public string LastName { get; private set; }
 
         [BsonElement("password")]
-        public string Password { get; set; }
+        public string Password { get; private set; }
 
         [BsonElement("active")]
-        public bool Active { get; set; }
+        public bool Active { get; private set; }
 
         [BsonElement("groups")]
-        public IEnumerable<ObjectId> Groups { get; set; }
+        private Collection<string> groups;
+
+        public IReadOnlyCollection<string> Groups { get { return groups; } }
 
         public bool CheckPassword(string password)
         {
@@ -53,6 +51,29 @@ namespace BasicAuthentication.Domain.Entities
         {
             PasswordHasher<User> passwordHasher = new PasswordHasher<User>();
             return passwordHasher.HashPassword(this, password);
+        }
+
+        public void AddGroup(string group)
+        {
+            if(groups is null)
+            {
+                groups = new Collection<string>();
+            }
+
+            groups.Add(group);
+        }
+
+        public void AddGroupRange(ICollection<string> groups)
+        {
+            if (groups is null)
+            {
+                groups = new Collection<string>();
+            }
+
+            foreach (var item in groups)
+            {
+                this.groups.Add(item);
+            }
         }
     }
 }

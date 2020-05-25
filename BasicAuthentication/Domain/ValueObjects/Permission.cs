@@ -2,9 +2,17 @@
 {
     public class Permission
     {
-        public bool Insert { get; set; }
-        public bool Update { get; set; }
-        public bool Delete { get; set; }
-        public bool Select { get; set; }
+        public Permission(bool insert, bool update, bool delete, bool select)
+        {
+            Insert = insert;
+            Update = update;
+            Delete = delete;
+            Select = select;
+        }
+
+        public bool Insert { get; private set; }
+        public bool Update { get; private set; }
+        public bool Delete { get; private set; }
+        public bool Select { get; private set; }
     }
 }

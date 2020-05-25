@@ -60,21 +60,16 @@ namespace BasicAuthentication.Controllers
         [HttpPost]
         public async Task<IActionResult> New(NewGroup newGroup)
         {
-            var group = new Group
-            {
-                Name = newGroup.Name,
-                PermissionModules = newGroup.PermissionModules.Select(p => new PermissionModule
-                {
-                    ModuleId = p.ModuleId,
-                    Permission = new Permission
-                    {
-                        Select = p.Select,
-                        Insert = p.Insert,
-                        Update = p.Update,
-                        Delete = p.Delete
-                    }
-                })
-            };
+            var group = new Group(newGroup.Name);
+
+            group.AddPermissionModuleRange(
+                newGroup
+                .PermissionModules
+                .Select(p => new PermissionModule(
+                    p.ModuleId,
+                    new Permission(p.Select, p.Insert, p.Update, p.Delete)
+                    )
+                ));
 
             await _groupRepository.CreateAsync(group);
 
@@ -112,21 +107,16 @@ namespace BasicAuthentication.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit([FromRoute] string id, NewGroup editedGroup)
         {
-            var group = new Group
-            {
-                Name = editedGroup.Name,
-                PermissionModules = editedGroup.PermissionModules.Select(p => new PermissionModule
-                {
-                    ModuleId = p.ModuleId,
-                    Permission = new Permission
-                    {
-                        Select = p.Select,
-                        Insert = p.Insert,
-                        Update = p.Update,
-                        Delete = p.Delete
-                    }
-                })
-            };
+            var group = new Group(editedGroup.Name);
+
+            group.AddPermissionModuleRange(
+                editedGroup
+                .PermissionModules
+                .Select(p =>new PermissionModule (
+                    p.ModuleId, 
+                    new Permission(p.Select, p.Insert, p.Update, p.Delete)
+                    )
+                ));
 
             await _groupRepository.UpdateAsync(id, group);
 

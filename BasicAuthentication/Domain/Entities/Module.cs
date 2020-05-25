@@ -5,10 +5,6 @@ namespace BasicAuthentication.Domain.Entities
 {
     public class Module
     {
-        public Module()
-        {
-        }
-
         public Module(string name, bool active)
         {
             Name = name;
@@ -17,12 +13,12 @@ namespace BasicAuthentication.Domain.Entities
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string Id { get; private set; }
 
         [BsonElement("name")]
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         [BsonElement("active")]
-        public bool Active { get; set; }
+        public bool Active { get; private set; }
     }
 }

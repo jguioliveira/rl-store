@@ -1,6 +1,5 @@
 ﻿using BasicAuthentication.Domain.Entities;
 using BasicAuthentication.Domain.ValueObjects;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +25,9 @@ namespace BasicAuthentication.Infrastructure.Context
         {
             IEnumerable<Module> modules = new List<Module>
             {
-                new Module{ Name = "User Management", Active = true},
-                new Module{ Name = "Account and Finance", Active = true},
-                new Module{ Name = "Purchasing", Active = true}
+                new Module("User Management", true),
+                new Module("Account and Finance", true),
+                new Module("Purchasing", true)
             };
 
             await _userDataContext.Modules.InsertManyAsync(modules);
@@ -39,14 +38,8 @@ namespace BasicAuthentication.Infrastructure.Context
         {
             PermissionModule permissionModule = CreatePermissionModule(modules.FirstOrDefault(m => m.Name == "User Management"));
 
-            Group group = new Group
-            {
-                Name = "SuperUser",
-                PermissionModules = new List<PermissionModule>
-                {
-                    permissionModule
-                }
-            };
+            Group group = new Group("SuperUser");
+            group.AddPermissionModule(permissionModule);
 
             await _userDataContext.Groups.InsertOneAsync(group);
 
@@ -55,27 +48,19 @@ namespace BasicAuthentication.Infrastructure.Context
 
         static PermissionModule CreatePermissionModule(Module module)
         {
-            PermissionModule permissionModule = new PermissionModule
-            {
-                ModuleId = module.Id,
-                Permission = new Permission
-                {
-                    Delete = true,
-                    Insert = true,
-                    Update = true,
-                    Select = true,
-                }
-            };
+            PermissionModule permissionModule = new PermissionModule (
+                module.Id,
+                new Permission(true, true, true, true)
+            );
 
             return permissionModule;
         }
 
         static async Task CreateUser(Group group)
         {
-            User user = new User("admin@company.com", "Super", "Admin", "admin@15", true)
-            {
-                Groups = new List<string> { group.Id }
-            };
+            User user = new User("admin@company.com", "Super", "Admin", "admin@15", true);
+
+            user.AddGroup(group.Id);
 
             await _userDataContext.Users.InsertOneAsync(user);
         }
