@@ -1,11 +1,9 @@
-﻿using BasicAuthentication.Domain.ValueObjects;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using UserManagement.Domain.ValueObjects;
 
-namespace BasicAuthentication.Domain.Entities
+namespace UserManagement.Domain.Entities
 {
     public class Group
     {

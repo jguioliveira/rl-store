@@ -1,4 +1,4 @@
-﻿namespace BasicAuthentication.Domain.ValueObjects
+﻿namespace UserManagement.Domain.ValueObjects
 {
     public class Permission
     {

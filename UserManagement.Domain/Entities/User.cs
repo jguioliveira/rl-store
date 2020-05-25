@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace BasicAuthentication.Domain.Entities
+namespace UserManagement.Domain.Entities
 {
     public class User
     {

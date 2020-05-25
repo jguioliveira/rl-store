@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-
-namespace BasicAuthentication.Domain.ValueObjects
+﻿namespace UserManagement.Domain.ValueObjects
 {
     public class PermissionModule
     {

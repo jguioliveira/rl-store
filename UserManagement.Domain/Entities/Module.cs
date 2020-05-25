@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace BasicAuthentication.Domain.Entities
+namespace UserManagement.Domain.Entities
 {
     public class Module
     {
