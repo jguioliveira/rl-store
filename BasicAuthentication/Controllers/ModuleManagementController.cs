@@ -1,5 +1,5 @@
-﻿using BasicAuthentication.Domain.Entities;
-using BasicAuthentication.Domain.Repositories;
+﻿using UserManagement.Domain.Entities;
+using UserManagement.Domain.Repositories;
 using BasicAuthentication.ViewModel.ModuleManagement;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;

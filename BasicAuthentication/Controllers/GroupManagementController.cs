@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using BasicAuthentication.Domain.Entities;
-using BasicAuthentication.Domain.Repositories;
-using BasicAuthentication.Domain.ValueObjects;
+using UserManagement.Domain.Entities;
+using UserManagement.Domain.Repositories;
+using UserManagement.Domain.ValueObjects;
 using BasicAuthentication.ViewModel.GroupManagement;
 using Microsoft.AspNetCore.Mvc;
 

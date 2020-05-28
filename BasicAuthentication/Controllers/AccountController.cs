@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using BasicAuthentication.Domain.Entities;
-using BasicAuthentication.Domain.Repositories;
+using UserManagement.Domain.Entities;
+using UserManagement.Domain.Repositories;
 using BasicAuthentication.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
