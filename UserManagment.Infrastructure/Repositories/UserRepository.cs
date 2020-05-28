@@ -1,18 +1,18 @@
-using BasicAuthentication.Domain.Entities;
-using BasicAuthentication.Domain.Repositories;
-using BasicAuthentication.Infrastructure.Context;
+using UserManagement.Domain.Entities;
+using UserManagement.Domain.Repositories;
+using UserManagement.Infrastructure.Context;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BasicAuthentication.Infrastructure.Repositories
+namespace UserManagement.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
 
-        private readonly IUserDataContext _dataContext;
+        private readonly UserDataContext _dataContext;
 
-        public UserRepository(IUserDataContext dataContext)
+        public UserRepository(UserDataContext dataContext)
         {
             _dataContext = dataContext;
         }

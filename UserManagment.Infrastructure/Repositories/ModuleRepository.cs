@@ -1,25 +1,26 @@
-﻿using BasicAuthentication.Domain.Entities;
-using BasicAuthentication.Domain.Repositories;
-using BasicAuthentication.Infrastructure.Context;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserManagement.Domain.Repositories;
+using UserManagement.Infrastructure.Context;
+using UserManagement.Domain.Entities;
 
-namespace BasicAuthentication.Infrastructure.Repositories
+namespace UserManagement.Infrastructure.Repositories
 {
     public class ModuleRepository : IModuleRepository
     {
-        private readonly IUserDataContext _userDataContext;
+        private readonly UserDataContext _userDataContext;
 
-        public ModuleRepository(IUserDataContext userDataContext)
+        public ModuleRepository(UserDataContext userDataContext)
         {
             _userDataContext = userDataContext;
         }
 
         public async Task CreateAsync(Module module)
         {
-            await _userDataContext.Modules.InsertOneAsync(module);
+            var dbModule = new Module(module.Name, module.Active);
+            await _userDataContext.Modules.InsertOneAsync(dbModule);
         }
 
         public async Task<Module> GetAsync(string id)

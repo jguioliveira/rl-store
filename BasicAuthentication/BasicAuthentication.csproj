@@ -1,6 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\**" />
+    <Content Remove="Infrastructure\**" />
+    <EmbeddedResource Remove="Infrastructure\**" />
+    <None Remove="Infrastructure\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="MongoDB.Bson" Version="2.10.4" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
@@ -8,6 +15,11 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\bootstrap\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UserManagement.Domain\UserManagement.Domain.csproj" />
+    <ProjectReference Include="..\UserManagment.Infrastructure\UserManagement.Infrastructure.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

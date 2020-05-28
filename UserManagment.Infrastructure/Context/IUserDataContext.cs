@@ -1,4 +1,4 @@
-using BasicAuthentication.Domain.Entities;
+using UserManagement.Domain.Entities;
 using MongoDB.Driver;
 
 namespace BasicAuthentication.Infrastructure.Context

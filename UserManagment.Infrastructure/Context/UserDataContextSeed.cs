@@ -1,17 +1,17 @@
-﻿using BasicAuthentication.Domain.Entities;
-using BasicAuthentication.Domain.ValueObjects;
+﻿using UserManagement.Domain.Entities;
+using UserManagement.Domain.ValueObjects;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BasicAuthentication.Infrastructure.Context
+namespace UserManagement.Infrastructure.Context
 {
     public class UserDataContextSeed
     {
-        private static IUserDataContext _userDataContext;
+        private static UserDataContext _userDataContext;
 
-        public static async Task SeedAsync(IUserDataContext userDataContext)
+        public static async Task SeedAsync(UserDataContext userDataContext)
         {
             _userDataContext = userDataContext;
 
