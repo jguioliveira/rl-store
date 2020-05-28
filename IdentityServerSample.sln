@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicAuthentication", "BasicAuthentication\BasicAuthentication.csproj", "{7F84B4DB-157B-4737-87E1-F6FB781CFD62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Domain", "UserManagement.Domain\UserManagement.Domain.csproj", "{CA4DEEA9-9E47-4B85-AA07-C4E57AC23973}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagement.Domain", "UserManagement.Domain\UserManagement.Domain.csproj", "{CA4DEEA9-9E47-4B85-AA07-C4E57AC23973}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Infrastructure", "UserManagment.Infrastructure\UserManagement.Infrastructure.csproj", "{E8DD160D-CF69-4193-9599-7A70E2220248}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagement.Infrastructure", "UserManagment.Infrastructure\UserManagement.Infrastructure.csproj", "{E8DD160D-CF69-4193-9599-7A70E2220248}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthUserManagement", "OAuthUserManagement\OAuthUserManagement.csproj", "{5FE92850-DB3D-4E75-AE17-8986F71D41C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{E8DD160D-CF69-4193-9599-7A70E2220248}.Release|x64.Build.0 = Release|Any CPU
 		{E8DD160D-CF69-4193-9599-7A70E2220248}.Release|x86.ActiveCfg = Release|Any CPU
 		{E8DD160D-CF69-4193-9599-7A70E2220248}.Release|x86.Build.0 = Release|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Debug|x64.Build.0 = Debug|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Debug|x86.Build.0 = Debug|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Release|x64.ActiveCfg = Release|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Release|x64.Build.0 = Release|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Release|x86.ActiveCfg = Release|Any CPU
+		{5FE92850-DB3D-4E75-AE17-8986F71D41C3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
