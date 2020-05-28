@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace UserManagement.Domain.Entities
+﻿namespace UserManagement.Domain.Entities
 {
     public class Module
     {
@@ -11,14 +8,10 @@ namespace UserManagement.Domain.Entities
             Active = active;
         }
 
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; private set; }
 
-        [BsonElement("name")]
         public string Name { get; private set; }
 
-        [BsonElement("active")]
         public bool Active { get; private set; }
     }
 }

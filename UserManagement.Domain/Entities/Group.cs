@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UserManagement.Domain.ValueObjects;
 
@@ -7,57 +6,49 @@ namespace UserManagement.Domain.Entities
 {
     public class Group
     {
+        private List<PermissionModule> _permissionModules;
+
         public Group(string name)
         {
             Name = name;
         }
 
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; private set; }
 
-        [BsonElement("name")]
         public string Name { get; private set; }
 
-        [BsonElement("permissionModules")]
-        private Collection<PermissionModule> permissionModules;
-
-        public IReadOnlyCollection<PermissionModule> PermissionModules { get { return permissionModules.ToArray(); } }
-
+        public IReadOnlyCollection<PermissionModule> PermissionModules { get { return _permissionModules.AsReadOnly(); } private set { _permissionModules = value.ToList(); } }
 
         public void AddPermissionModule(PermissionModule permissionModule)
         {
-            if(permissionModules is null)
+            if(_permissionModules is null)
             {
-                permissionModules = new Collection<PermissionModule>();
+                _permissionModules = new List<PermissionModule>();
             }
 
-            permissionModules.Add(permissionModule);
+            _permissionModules.Add(permissionModule);
         }
 
         public void AddPermissionModule(string moduleId, bool insert, bool update, bool delete, bool select)
         {
             var permissionModule = new PermissionModule(moduleId, insert, update, delete, select);
 
-            if (permissionModules is null)
+            if (_permissionModules is null)
             {
-                permissionModules = new Collection<PermissionModule>();
+                _permissionModules = new List<PermissionModule>();
             }
 
-            permissionModules.Add(permissionModule);
+            _permissionModules.Add(permissionModule);
         }
 
-        public void AddPermissionModuleRange(IEnumerable<PermissionModule> permissionModule)
+        public void AddPermissionModuleRange(IEnumerable<PermissionModule> permissionModules)
         {
-            if (permissionModules is null)
+            if (_permissionModules is null)
             {
-                permissionModules = new Collection<PermissionModule>();
+                _permissionModules = new List<PermissionModule>();
             }
 
-            foreach (var item in permissionModule)
-            {
-                permissionModules.Add(item);
-            }            
+            _permissionModules.AddRange(permissionModules);
         }
     }
 }
