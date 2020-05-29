@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagement.Domain", "Us
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagement.Infrastructure", "UserManagment.Infrastructure\UserManagement.Infrastructure.csproj", "{E8DD160D-CF69-4193-9599-7A70E2220248}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthUserManagement", "OAuthUserManagement\OAuthUserManagement.csproj", "{5FE92850-DB3D-4E75-AE17-8986F71D41C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagement.OAuth", "OAuthUserManagement\UserManagement.OAuth.csproj", "{5FE92850-DB3D-4E75-AE17-8986F71D41C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
