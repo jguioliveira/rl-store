@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using UserManagement.Domain.Repositories;
+using UserManagement.Infrastructure.Repositories;
 using UserManagement.OAuth.Configuration;
 
 namespace UserManagement.OAuth
@@ -43,6 +45,16 @@ namespace UserManagement.OAuth
                 });
 
             services.AddControllersWithViews();
+
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IModuleRepository, ModuleRepository>();
+            services.AddTransient<IGroupRepository, GroupRepository>();
+
+            services.ConfigureMongoDb(options =>
+            {
+                options.ConnectionString = settings.DatabaseSettings.ConnectionString;
+                options.DatabaseName = settings.DatabaseSettings.DatabaseName;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
