@@ -33,7 +33,8 @@ namespace UserManagement.OAuth
 
             var secret = Encoding.UTF8.GetBytes(settings.OAuthSettings.Secret);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters()
