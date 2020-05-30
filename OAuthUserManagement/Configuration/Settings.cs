@@ -1,4 +1,6 @@
-﻿namespace UserManagement.OAuth.Configuration
+﻿using System.Collections.Generic;
+
+namespace UserManagement.OAuth.Configuration
 {
     public class Settings
     {
@@ -11,6 +13,7 @@
         public string Issuer { get; set; }
         public string Audience { get; set; }
         public string Secret { get; set; }
+        public List<string> Clients { get; set; }
     }
 
     public class DatabaseSettings
