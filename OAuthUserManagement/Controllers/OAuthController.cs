@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using UserManagement.Domain.Entities;
 using UserManagement.Domain.Repositories;
 using UserManagement.OAuth.Configuration;
 using UserManagement.OAuth.ViewModel;
@@ -18,13 +19,16 @@ namespace UserManagement.OAuth.Controllers
     public class OAuthController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserTokenRepository _userTokenRepository;
         private readonly Settings _appSettings;
 
         public OAuthController(
             IUserRepository userRepository,
+            IUserTokenRepository userTokenRepository,
             IConfiguration configuration)
         {
             _userRepository = userRepository;
+            _userTokenRepository = userTokenRepository;
             _appSettings = configuration.GetSection("Settings").Get<Settings>();
         }
 
@@ -49,7 +53,7 @@ namespace UserManagement.OAuth.Controllers
             {
                 query.Add("error", "invalid_request");
                 return Redirect($"{redirect_uri}?{query}");
-            }            
+            }
 
             if (!_appSettings.OAuthSettings.Clients.Contains(client_id))
             {
@@ -70,9 +74,10 @@ namespace UserManagement.OAuth.Controllers
                 query.Add("error", "access_denied");
             }
 
-            var expiration = DateTime.Now.AddMinutes(5);
-            string code = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.Email}]:[{expiration.Ticks}"));
-            query.Add("code", code);
+            UserToken userToken = new UserToken(user.Email, redirect_uri, DateTime.Now.AddMinutes(5).Ticks);
+            await _userTokenRepository.CreateAsync(userToken);
+
+            query.Add("code", userToken.AuthorizationCode);
 
             return Redirect($"{redirect_uri}{query}");
         }
@@ -85,30 +90,47 @@ namespace UserManagement.OAuth.Controllers
             string client_id)
         {
 
-            var byteCode = Convert.FromBase64String(code);
-            var key = Encoding.UTF8.GetString(byteCode);
-            var email = key.Split("]:[")[0];
+            UserToken userToken = await _userTokenRepository.GetAsync(code);
 
-            var user = await _userRepository.GetAsync(email);
-            List<Claim> claims = new List<Claim>()
+            if(userToken is null || userToken.IsCanceled || redirect_uri != userToken.RedirectUri )
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(ClaimTypes.Role, user.Groups.Aggregate((a, x) => a + ", " + x))
-            };
+                return BadRequest(new { error = "invalid_request" });
+            }
+            else if (string.IsNullOrEmpty(userToken.Token) || Convert.ToDateTime(userToken.AuthorizationCodeExpiration) <= DateTime.Now)
+            {
+                userToken.Cancel();
+                await _userTokenRepository.UpdateAsync(userToken.Id, userToken);
+                return BadRequest(new { error = "invalid_request" });
+            }
+            else
+            {
+                var user = await _userRepository.GetAsync(userToken.Email);
+                List<Claim> claims = new List<Claim>()
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                    new Claim(ClaimTypes.Role, user.Groups.Aggregate((a, x) => a + ", " + x))
+                };
 
-            var secret = Encoding.UTF8.GetBytes(_appSettings.OAuthSettings.Secret);
+                var secret = Encoding.UTF8.GetBytes(_appSettings.OAuthSettings.Secret);
+                var expirationToken = DateTime.Now.AddMinutes(15);
 
-            JwtSecurityToken token = new JwtSecurityToken(
-                _appSettings.OAuthSettings.Issuer, 
-                _appSettings.OAuthSettings.Audience,
-                claims, 
-                DateTime.Now, 
-                DateTime.Now.AddMinutes(15),
-                new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256));
+                JwtSecurityToken token = new JwtSecurityToken(
+                    _appSettings.OAuthSettings.Issuer,
+                    _appSettings.OAuthSettings.Audience,
+                    claims,
+                    DateTime.Now,
+                    expirationToken,
+                    new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256));
 
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
 
-            return Ok(new { access_token = handler.WriteToken(token)});
+                var access_token = handler.WriteToken(token);
+
+                userToken.SetToken(access_token, expirationToken.Ticks);
+                await _userTokenRepository.UpdateAsync(userToken.Id, userToken);
+
+                return Ok(new { access_token });
+            }            
         }
     }
 }
