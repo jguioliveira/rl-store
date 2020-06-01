@@ -48,6 +48,7 @@ namespace UserManagement.OAuth
             services.AddControllersWithViews();
 
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserTokenRepository, UserTokenRepository>();
             services.AddTransient<IModuleRepository, ModuleRepository>();
             services.AddTransient<IGroupRepository, GroupRepository>();
 
