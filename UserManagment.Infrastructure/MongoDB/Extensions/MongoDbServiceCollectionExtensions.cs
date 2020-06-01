@@ -2,6 +2,7 @@
 using UserManagement.Infrastructure.Context;
 using UserManagement.Infrastructure.MongoDb;
 using UserManagement.Infrastructure.MongoDb.Map;
+using UserManagement.Infrastructure.MongoDB.Map;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,6 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
             ModuleMap.Configure();
             GroupMap.Configure();
             UserMap.Configure();
+            UserTokenMap.Configure();
 
             MongoDbOptions mongoDbOptions = new MongoDbOptions();
             options.Invoke(mongoDbOptions);
