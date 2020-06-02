@@ -26,8 +26,7 @@ namespace UserManagement.Infrastructure.Context
             IEnumerable<Module> modules = new List<Module>
             {
                 new Module("User Management", true),
-                new Module("Account and Finance", true),
-                new Module("Purchasing", true)
+                new Module("Inventory Management", true)
             };
 
             await _userDataContext.Modules.InsertManyAsync(modules);
