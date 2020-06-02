@@ -1,11 +1,14 @@
 using UserManagement.Domain.Repositories;
-using UserManagement.Infrastructure.Context;
 using UserManagement.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.Extensions.Options;
+using System;
 
 namespace BasicAuthentication
 {
@@ -22,11 +25,38 @@ namespace BasicAuthentication
         {
             services.AddMvc();
 
-            services.AddAuthentication(options => {
+            //services
+            //    .AddAuthentication(config => 
+            //    {
+            //        //Check the cookie to confirm that we are authenticated
+            //        config.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            //        //When we sign in, we will deal out a cookie
+            //        config.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            //        //use this to check if we are allowed to do something
+            //        config.DefaultChallengeScheme = "UserManagementOAuth";
+            //    })
+            //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => 
+            //    {
+            //        options.ExpireTimeSpan = TimeSpan.FromTicks(DateTime.Now.AddMinutes(15).Ticks);
+            //    })
+            //    .AddOAuth("UserManagementOAuth", options => 
+            //    {
+            //        options.CallbackPath = "/oauth/callback";
+            //        options.AuthorizationEndpoint = "https://localhost:44398/oauth/authenticate";
+            //        options.TokenEndpoint = "https://localhost:44398/oauth/token";
+            //        options.ClientId = "UserManagement";
+            //        options.ClientSecret = "19F6CEAB-4A5C-4555-8E39-A355EFDB357C";
+            //    });
+
+            services.AddAuthentication(options =>
+            {
                 options.DefaultScheme = "BasicAuth";
                 options.RequireAuthenticatedSignIn = true;
             })
-            .AddCookie("BasicAuth", options => {
+            .AddCookie("BasicAuth", options =>
+            {
                 options.Cookie.Name = "BasicAuth.Cookie";
                 options.LoginPath = "/Home/SignIn";
             });
