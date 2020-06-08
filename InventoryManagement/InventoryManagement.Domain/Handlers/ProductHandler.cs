@@ -49,13 +49,13 @@ namespace InventoryManagement.Domain.Handlers
 
         public async Task<ICommandResult> HandleAsync(CreateProductCommand command)
         {
-            var validate = await Validate(command);
-            if (!validate.Item1)
+            var isValid = await Validate(command);
+            if (!isValid)
             {
                 return new CommandResult(false, "error message");
             }
 
-            var product = Product.New(command.Name, validate.Item2, validate.Item3);
+            var product = Product.New(command.Name, command.CategoryId, command.ManufacturerId);
 
             await _productRepository.CreateAsync(product);
 
@@ -64,13 +64,13 @@ namespace InventoryManagement.Domain.Handlers
 
         public async Task<ICommandResult> HandleAsync(UpdateProductCommand command)
         {
-            var validate = await Validate(command);
-            if (!validate.Item1)
+            var isValid = await Validate(command);
+            if (!isValid)
             {
                 return new CommandResult(false, "error message");
             }
 
-            var product = new Product(command.Id, command.Name, validate.Item2, validate.Item3);
+            var product = new Product(command.Id, command.Name, command.CategoryId, command.ManufacturerId);
             await _productRepository.UpdateAsync(product);
 
             return new CommandResult(true, "Product successfully updated.");
@@ -128,20 +128,20 @@ namespace InventoryManagement.Domain.Handlers
             return new CommandResult(true, "Product Bookmarks successfully updated.");
         }
 
-        async Task<Tuple<bool, Category, Manufacturer>> Validate(CreateProductCommand command)
+        async Task<bool> Validate(CreateProductCommand command)
         {
             command.Validate();
 
             if (!command.IsValid)
             {
-                return Tuple.Create<bool, Category, Manufacturer>(false, null, null);
+                return false;
             }
 
             var exists = await _productRepository.ExistsAsync(command.Code);
             if (exists)
             {
                 command.AddError("Code already registered.");
-                return Tuple.Create<bool, Category, Manufacturer>(false, null, null);
+                return false;
             }
 
             var taskCategory = _categoryRepository.GetAsync(command.CategoryId);
@@ -155,16 +155,16 @@ namespace InventoryManagement.Domain.Handlers
             if (category is null)
             {
                 command.AddError("Category not found.");
-                return Tuple.Create<bool, Category, Manufacturer>(false, null, null);
+                return false;
             }
 
             if (manufacturer is null)
             {
                 command.AddError("Manufacturer not found.");
-                return Tuple.Create<bool, Category, Manufacturer>(false, null, null);
+                return false;
             }
 
-            return Tuple.Create<bool, Category, Manufacturer>(true, category, manufacturer);
+            return true;
         }
     }
 }
