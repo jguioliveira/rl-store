@@ -4,9 +4,9 @@ namespace InventoryManagement.Domain.Entities
 {
     public class Inventory
     {
-        public Inventory(Product product, short count)
+        public Inventory(string productId, short count)
         {
-            Product = product;
+            ProductId = productId;
             Count = count;
             MinCount = 0;
             CreatedOn = DateTime.Now;
@@ -14,6 +14,7 @@ namespace InventoryManagement.Domain.Entities
         }
 
         public Product Product { get; private set; }
+        public string ProductId { get; private set; }
         public short Count { get; private set; }
         public byte MinCount { get; private set; }
         public DateTime CreatedOn { get; private set; }

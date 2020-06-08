@@ -5,25 +5,29 @@ namespace InventoryManagement.Domain.Entities
 {
     public class Product
     {
-        public static Product New(string name, Category category, Manufacturer manufacturer)
+        public static Product New(string name, string categoryId, string manufacturerId)
         {
-            var product = new Product(Guid.NewGuid().ToString(), name, category, manufacturer);
+            var product = new Product(Guid.NewGuid().ToString(), name, categoryId, manufacturerId);
             return product;
         }
 
         private Product() { }
 
-        public Product(string id, string name, Category category, Manufacturer manufacturer)
+        public Product(string id, string name, string categoryId, string manufacturerId)
         {
             Id = id;
             Name = name;
-            Category = category;
-            Manufacturer = manufacturer;
+            CategoryId = categoryId;
+            ManufacturerId = manufacturerId;
         }
 
         public string Id { get; private set; }
         public string Code { get; set; }
         public string Name { get; private set; }
+
+        public string CategoryId { get; private set; }
+        public string ManufacturerId { get; private set; }
+
         public Category Category { get; private set; }
         public Manufacturer Manufacturer { get; private set; }
         public Inventory Inventory { get; private set; }
@@ -39,7 +43,7 @@ namespace InventoryManagement.Domain.Entities
             if (productBookMarks is null)
                 productBookMarks = new List<ProductBookMark>();
 
-            ProductBookMark productBookMark = new ProductBookMark(this, code, name, value, count);
+            ProductBookMark productBookMark = new ProductBookMark(Id, code, name, value, count);
 
             productBookMarks.Add(productBookMark);
         }
@@ -53,7 +57,7 @@ namespace InventoryManagement.Domain.Entities
         public void UpdateInventory(short count, byte minCount)
         {
             if (Inventory is null)
-                Inventory = new Inventory(this, count);
+                Inventory = new Inventory(Id, count);
 
             Inventory.UpdateMinCount(minCount);
             Inventory.UpdateCount(count);

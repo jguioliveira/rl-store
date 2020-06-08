@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace InventoryManagement.Domain.Entities
 {
@@ -28,5 +29,8 @@ namespace InventoryManagement.Domain.Entities
         public string Id { get; private set; }
         public string FatherCategoryId { get; private set; }
         public string Name { get; private set; }
+
+
+        public IEnumerable<Product> Products { get; internal set; }
     }
 }

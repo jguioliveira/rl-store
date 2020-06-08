@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace InventoryManagement.Domain.Entities
 {
@@ -21,5 +22,8 @@ namespace InventoryManagement.Domain.Entities
         public string Name { get; private set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+
+
+        public IEnumerable<Product> Products { get; private set; }
     }
 }
