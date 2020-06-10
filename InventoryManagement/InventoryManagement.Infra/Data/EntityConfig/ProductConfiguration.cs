@@ -28,12 +28,16 @@ namespace InventoryManagement.Infrastructure.Data.EntityConfig
                 .HasForeignKey<Inventory>(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Property(p => p.CategoryId)
+                .IsRequired();
             builder.HasOne(b => b.Category)
                 .WithMany(b => b.Products)
                 .HasConstraintName("FK_Product_Category")
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Property(p => p.ManufacturerId)
+                .IsRequired();
             builder.HasOne(b => b.Manufacturer)
                 .WithMany(b => b.Products)
                 .HasConstraintName("FK_Product_Manufacturer")
