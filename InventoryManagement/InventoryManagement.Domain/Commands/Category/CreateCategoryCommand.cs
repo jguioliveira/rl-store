@@ -1,5 +1,4 @@
-﻿using InventoryManagement.Domain.Entities;
-using InventoryManagement.Domain.Validation;
+﻿using InventoryManagement.Domain.Validation;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,8 +6,6 @@ namespace InventoryManagement.Domain.Commands
 {
     public class CreateCategoryCommand : Validate, ICommand
     {
-        public int MAX_SUBCATEGORIES { get => Category.MAX_SUBCATEGORIES; }
-
         public class CategoryData
         {
             public string Name { get; set; }
@@ -29,7 +26,7 @@ namespace InventoryManagement.Domain.Commands
             {
                 bool result = categories.Any(c => string.IsNullOrEmpty(c.Name));
 
-                if (!result)
+                if (!result && categories.Any(c => !(c.Children is null) && c.Children.Any()))
                 {
                     result = childrenNameEmpty(categories.SelectMany(c => c.Children));
                 }
