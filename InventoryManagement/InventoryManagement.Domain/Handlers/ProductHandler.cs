@@ -52,7 +52,7 @@ namespace InventoryManagement.Domain.Handlers
             var isValid = await Validate(command);
             if (!isValid)
             {
-                return new CommandResult(false, "error message");
+                return new CommandResult(false, command.Errors);
             }
 
             var product = Product.New(command.Name, command.CategoryId, command.ManufacturerId);
@@ -67,7 +67,7 @@ namespace InventoryManagement.Domain.Handlers
             var isValid = await Validate(command);
             if (!isValid)
             {
-                return new CommandResult(false, "error message");
+                return new CommandResult(false, command.Errors);
             }
 
             var product = new Product(command.Id, command.Name, command.CategoryId, command.ManufacturerId);
@@ -82,7 +82,7 @@ namespace InventoryManagement.Domain.Handlers
 
             if (!command.IsValid)
             {
-                return new CommandResult(false, "error message");
+                return new CommandResult(false, command.Errors);
             }
 
             var product = await _productRepository.GetAsync(command.ProductId);
@@ -105,7 +105,7 @@ namespace InventoryManagement.Domain.Handlers
 
             if (!command.IsValid)
             {
-                return new CommandResult(false, "error message");
+                return new CommandResult(false, command.Errors);
             }
 
             var product = await _productRepository.GetAsync(command.ProductId);

@@ -32,7 +32,7 @@ namespace InventoryManagement.Domain.Handlers
 
             if(!command.IsValid)
             {
-                new CommandResult(false, "error message.");
+                new CommandResult(false, command.Errors);
             }
 
             var manufacturer = Manufacturer.New(command.Name);
@@ -50,7 +50,7 @@ namespace InventoryManagement.Domain.Handlers
 
             if (!command.IsValid)
             {
-                new CommandResult(false, "error message.");
+                new CommandResult(false, command.Errors);
             }
 
             var manufacturer = new Manufacturer(command.Id, command.Name)
@@ -59,7 +59,7 @@ namespace InventoryManagement.Domain.Handlers
                 Phone = command.Phone
             };
 
-            await _manufacturerRepository.UpdateAsync(manufacturer.Id, manufacturer);
+            await _manufacturerRepository.UpdateAsync(manufacturer);
 
             return new CommandResult(true, "Manufacturer successfully updated.");
         }

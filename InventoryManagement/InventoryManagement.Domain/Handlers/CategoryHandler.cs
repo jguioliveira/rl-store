@@ -35,7 +35,7 @@ namespace InventoryManagement.Domain.Handlers
 
             if (!command.IsValid)
             {
-                new CommandResult(false, "error message.");
+                new CommandResult(false, command.Errors);
             }
 
             //validar se já existe categoria com nome enviado
@@ -68,7 +68,7 @@ namespace InventoryManagement.Domain.Handlers
 
             if (!command.IsValid)
             {
-                new CommandResult(false, "error message.");
+                new CommandResult(false, command.Errors);
             }
 
             //validar se já existe categoria com nome enviado
@@ -91,7 +91,7 @@ namespace InventoryManagement.Domain.Handlers
             //atualizar categoria
             var category = new Category(command.Id, command.Name, command.FatherCategoryId);
 
-            await _categoryRepository.UpdateAsync(category.Id, category);
+            await _categoryRepository.UpdateAsync(category);
 
             return new CommandResult(true, "Category successfully updated.");
         }
