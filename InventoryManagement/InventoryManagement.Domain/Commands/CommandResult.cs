@@ -6,13 +6,13 @@
         {
         }
 
-        public CommandResult(bool success, string message)
+        public CommandResult(bool success, object message)
         {
             Success = success;
             Message = message;
         }
 
         public bool Success { get; set; }
-        public string Message { get; set; }
+        public object Message { get; set; }
     }
 }
