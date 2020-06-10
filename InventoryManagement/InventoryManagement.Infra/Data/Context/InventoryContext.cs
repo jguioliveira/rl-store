@@ -12,15 +12,8 @@ namespace InventoryManagement.Infrastructure.Context
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<ProductBookMark> ProductBookMarks { get; set; }
 
+        public InventoryContext(DbContextOptions<InventoryContext> options) : base(options) { }
 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseMySql("server=192.168.56.101;database=INVENTORY;user=iu_inventory;password=iu_inventory#20");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
