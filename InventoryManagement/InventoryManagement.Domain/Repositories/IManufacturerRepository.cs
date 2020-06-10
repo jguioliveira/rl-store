@@ -7,8 +7,7 @@ namespace InventoryManagement.Domain.Repositories
     public interface IManufacturerRepository
     {
         Task CreateAsync(Manufacturer manufacturer);
-        Task UpdateAsync(string id, Manufacturer manufacturer);
-        Task DeleteAsync(string id);
+        Task UpdateAsync(Manufacturer manufacturer);
         Task<Manufacturer> GetAsync(string id);
         Task<IEnumerable<Manufacturer>> GetAsync();
     }
