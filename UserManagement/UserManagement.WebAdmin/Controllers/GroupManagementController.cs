@@ -5,9 +5,11 @@ using UserManagement.Domain.Repositories;
 using UserManagement.Domain.ValueObjects;
 using BasicAuthentication.ViewModel.GroupManagement;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BasicAuthentication.Controllers
 {
+    [Authorize]
     public class GroupManagementController : Controller
     {
         private readonly IGroupRepository _groupRepository;

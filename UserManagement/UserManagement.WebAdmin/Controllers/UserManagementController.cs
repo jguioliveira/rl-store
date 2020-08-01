@@ -4,9 +4,11 @@ using UserManagement.Domain.Entities;
 using UserManagement.Domain.Repositories;
 using BasicAuthentication.ViewModel.UserManagement;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BasicAuthentication.Controllers
 {
+    [Authorize]
     public class UserManagementController : Controller
     {
         private readonly IUserRepository _userRepository;

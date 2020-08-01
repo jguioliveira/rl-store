@@ -26,7 +26,7 @@ namespace BasicAuthentication.Controllers
 
         public async Task<IActionResult> SignOut()
         {
-            await HttpContext.SignOutAsync("BasicAuth");
+            await HttpContext.SignOutAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
     }

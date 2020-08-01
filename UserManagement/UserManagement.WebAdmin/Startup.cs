@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Options;
 using System;
+using System.Threading.Tasks;
 
 namespace BasicAuthentication
 {
@@ -25,41 +26,47 @@ namespace BasicAuthentication
         {
             services.AddMvc();
 
-            //services
-            //    .AddAuthentication(config => 
-            //    {
-            //        //Check the cookie to confirm that we are authenticated
-            //        config.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            services
+                .AddAuthentication(config =>
+                {
+                    //Check the cookie to confirm that we are authenticated
+                    config.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
-            //        //When we sign in, we will deal out a cookie
-            //        config.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    //When we sign in, we will deal out a cookie
+                    config.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
-            //        //use this to check if we are allowed to do something
-            //        config.DefaultChallengeScheme = "UserManagementOAuth";
-            //    })
-            //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => 
-            //    {
-            //        options.ExpireTimeSpan = TimeSpan.FromTicks(DateTime.Now.AddMinutes(15).Ticks);
-            //    })
-            //    .AddOAuth("UserManagementOAuth", options => 
-            //    {
-            //        options.CallbackPath = "/oauth/callback";
-            //        options.AuthorizationEndpoint = "https://localhost:44398/oauth/authenticate";
-            //        options.TokenEndpoint = "https://localhost:44398/oauth/token";
-            //        options.ClientId = "UserManagement";
-            //        options.ClientSecret = "19F6CEAB-4A5C-4555-8E39-A355EFDB357C";
-            //    });
+                    //use this to check if we are allowed to do something
+                    config.DefaultChallengeScheme = "UserManagementOAuth";
+                })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    //options.ExpireTimeSpan = TimeSpan.FromTicks(DateTime.Now.AddMinutes(15).Ticks);
+                })
+                .AddOAuth("UserManagementOAuth", options =>
+                {
+                    options.CallbackPath = "/oauth/callback";
+                    options.AuthorizationEndpoint = "https://localhost:44398/oauth/authenticate";
+                    options.TokenEndpoint = "https://localhost:44398/oauth/token";
+                    options.ClientId = "UserManagement";
+                    options.ClientSecret = "19F6CEAB-4A5C-4555-8E39-A355EFDB357C";
+                    options.SaveTokens = true;
+                    options.Events.OnTicketReceived = (context) =>
+                    {
+                        context.Properties.ExpiresUtc = DateTimeOffset.Parse(context.Properties.Items[".Token.expires_at"]);
+                        return Task.CompletedTask;
+                    };
+                });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "BasicAuth";
-                options.RequireAuthenticatedSignIn = true;
-            })
-            .AddCookie("BasicAuth", options =>
-            {
-                options.Cookie.Name = "BasicAuth.Cookie";
-                options.LoginPath = "/Home/SignIn";
-            });
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = "BasicAuth";
+            //    options.RequireAuthenticatedSignIn = true;
+            //})
+            //.AddCookie("BasicAuth", options =>
+            //{
+            //    options.Cookie.Name = "BasicAuth.Cookie";
+            //    options.LoginPath = "/Home/SignIn";
+            //});
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IModuleRepository, ModuleRepository>();

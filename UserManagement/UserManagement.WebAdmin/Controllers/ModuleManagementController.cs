@@ -4,9 +4,11 @@ using BasicAuthentication.ViewModel.ModuleManagement;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BasicAuthentication.Controllers
 {
+    [Authorize]
     public class ModuleManagementController : Controller
     {
         private readonly IModuleRepository _moduleRepository;
