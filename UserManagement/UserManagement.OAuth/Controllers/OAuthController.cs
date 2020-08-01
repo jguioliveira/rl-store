@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Extensions;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -96,7 +97,7 @@ namespace UserManagement.OAuth.Controllers
             {
                 return BadRequest(new { error = "invalid_request" });
             }
-            else if (string.IsNullOrEmpty(userToken.Token) || Convert.ToDateTime(userToken.AuthorizationCodeExpiration) <= DateTime.Now)
+            else if (!string.IsNullOrEmpty(userToken.Token) || new DateTime(userToken.AuthorizationCodeExpiration) <= DateTime.Now)
             {
                 userToken.Cancel();
                 await _userTokenRepository.UpdateAsync(userToken.Id, userToken);
@@ -112,7 +113,7 @@ namespace UserManagement.OAuth.Controllers
                 };
 
                 var secret = Encoding.UTF8.GetBytes(_appSettings.OAuthSettings.Secret);
-                var expirationToken = DateTime.Now.AddMinutes(15);
+                var expirationToken = DateTime.Now.AddSeconds(15);
 
                 JwtSecurityToken token = new JwtSecurityToken(
                     _appSettings.OAuthSettings.Issuer,
@@ -125,12 +126,26 @@ namespace UserManagement.OAuth.Controllers
                 JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
 
                 var access_token = handler.WriteToken(token);
-
                 userToken.SetToken(access_token, expirationToken.Ticks);
                 await _userTokenRepository.UpdateAsync(userToken.Id, userToken);
 
-                return Ok(new { access_token });
+                return Ok(
+                    new 
+                    { 
+                        access_token,
+                        token_type = "bearer",
+                        expires_in = (int)(expirationToken - DateTime.Now).TotalSeconds,
+                        refresh_token = ""
+                    }
+                );
             }            
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult Validate()
+        {
+            return Ok();
         }
     }
 }
