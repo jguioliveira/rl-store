@@ -1,8 +1,11 @@
+using InventoryManagement.Api.Requirements;
 using InventoryManagement.Domain.Commands;
 using InventoryManagement.Domain.Handlers;
 using InventoryManagement.Domain.Repositories;
 using InventoryManagement.Infrastructure.Data.Configuration;
 using InventoryManagement.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -22,12 +25,23 @@ namespace InventoryManagement.Api
             _configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
+
+            services.AddHttpClient();
+            services.AddHttpContextAccessor();
+
+            services.AddAuthentication("ApiAuth")
+                .AddScheme<AuthenticationSchemeOptions, CustomAuthenticationHandler>("ApiAuth", null);
+
+            services.AddAuthorization(options =>
+            {
+                var policeBuilder = new AuthorizationPolicyBuilder();
+                policeBuilder.Requirements.Add(new JwtRequirement());
+                options.DefaultPolicy = policeBuilder.Build();
+            });
+
             services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
@@ -35,14 +49,39 @@ namespace InventoryManagement.Api
                 options.DefaultApiVersion = new ApiVersion(1, 0);
             });
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(s =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Inventory API", Version = "v1" });
-                c.SwaggerDoc("v2", new OpenApiInfo { Title = "Inventory API", Version = "v2" });
+                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Inventory API", Version = "v1" });
+                s.SwaggerDoc("v2", new OpenApiInfo { Title = "Inventory API", Version = "v2" });
+
+                s.AddSecurityDefinition("BearerAuth", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Specify the authorization token. i.e. Bearer {token}",
+                    Scheme = "Bearer",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey, 
+                    BearerFormat = "JWT"
+                });
+
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                   {
+                     new OpenApiSecurityScheme
+                     {
+                       Reference = new OpenApiReference
+                       {
+                         Type = ReferenceType.SecurityScheme,
+                         Id = "BearerAuth"
+                       }
+                      },
+                      new string[] { }
+                    }
+                });
             });
 
             services.ConfigureInventoryDb(_configuration.GetConnectionString("InventoryDb"));
 
+            services.AddScoped<IAuthorizationHandler, JwtRequirementHandler>();
             services.AddTransient<IManufacturerRepository, ManufacturerRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
@@ -56,7 +95,6 @@ namespace InventoryManagement.Api
             services.AddTransient<IHandler<UpdateBookMarksCommand>, ProductHandler>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -66,6 +104,7 @@ namespace InventoryManagement.Api
 
             app.UseRouting();
             app.UseApiVersioning();
+            app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

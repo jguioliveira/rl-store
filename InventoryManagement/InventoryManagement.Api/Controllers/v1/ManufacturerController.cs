@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using InventoryManagement.Domain.Commands;
 using InventoryManagement.Domain.Handlers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InventoryManagement.Api.Controllers.v1
 {
@@ -25,6 +22,7 @@ namespace InventoryManagement.Api.Controllers.v1
             _updateHandler = updateHandler;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateManufacturerCommand createCommand)
         {
@@ -38,6 +36,7 @@ namespace InventoryManagement.Api.Controllers.v1
             return Ok();
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateManufacturerCommand updateCommand)
         {

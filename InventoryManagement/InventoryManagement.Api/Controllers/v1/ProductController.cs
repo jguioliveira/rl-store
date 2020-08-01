@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using InventoryManagement.Domain.Commands;
 using InventoryManagement.Domain.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagement.Api.Controllers.v1
@@ -36,6 +34,7 @@ namespace InventoryManagement.Api.Controllers.v1
             return Ok();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateProductCommand createCommand)
         {
@@ -49,6 +48,7 @@ namespace InventoryManagement.Api.Controllers.v1
             return Ok();
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateProductCommand updateCommand)
         {
@@ -62,6 +62,7 @@ namespace InventoryManagement.Api.Controllers.v1
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("{id}/inventory")]
         public async Task<IActionResult> UpdateInventoryAsync(string id, UpdateInventoryCommand updateCommand)
         {
@@ -78,6 +79,7 @@ namespace InventoryManagement.Api.Controllers.v1
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("{id}/productbookmark")]
         public async Task<IActionResult> UpdateProductBookMarkAsync(string id, UpdateBookMarksCommand updateCommand)
         {
