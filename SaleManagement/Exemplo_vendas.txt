@@ -1,0 +1,57 @@
+Exemplos de vendas
+
+                  venda 1
+
+Produto     Quantidade     Valor.unit
+------------------------------------------------
+Caneta           1             1,50
+------------------------------------------------
+
+TOTAL R$                       1,50
+------------------------------------------------
+02/08/2020
+
+
+
+
+
+
+                  venda 2
+
+Produto     Quantidade     Valor.unit
+------------------------------------------------
+Caneta           2             1,50
+Caderno          1            20,00
+------------------------------------------------
+
+TOTAL R$                       23,00
+------------------------------------------------
+02/08/2020
+
+
+
+
+                 
+
+                  venda 3
+
+Produto     Quantidade     Valor.unit
+------------------------------------------------
+Caneta           1             1,50
+Caderno          1            20,00
+Borracha         1             4,50
+------------------------------------------------
+
+TOTAL R$                       26,00
+------------------------------------------------
+02/08/2020
+
+
+
+
+
+
+Descrição da venda
+
+Nessessário descrição do produto, a quantidade de itens, o valor unitário de cada produto,
+cálculo total dos produtos e a data da venda.
