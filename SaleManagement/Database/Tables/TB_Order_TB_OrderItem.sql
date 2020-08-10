@@ -18,4 +18,8 @@ create table TB_OrderItem(
     Total decimal(14,2)not null,
     ProductName varchar(100),
     primary key(OrderId, ProductId)
+    
 );
+
+alter table TB_OrderItem add constraint fk_order foreign key (OrderId) references TB_Order(Id);
+describe TB_OrderItem;tb_orderitem
