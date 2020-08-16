@@ -43,7 +43,7 @@ namespace BasicAuthentication
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
-                    //options.ExpireTimeSpan = TimeSpan.FromTicks(DateTime.Now.AddMinutes(15).Ticks);
+                    options.LoginPath = "/Account";
                 })
                 .AddOAuth("UserManagementOAuth", options =>
                 {
@@ -67,17 +67,6 @@ namespace BasicAuthentication
                         return Task.CompletedTask;
                     };
                 });
-
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = "BasicAuth";
-            //    options.RequireAuthenticatedSignIn = true;
-            //})
-            //.AddCookie("BasicAuth", options =>
-            //{
-            //    options.Cookie.Name = "BasicAuth.Cookie";
-            //    options.LoginPath = "/Home/SignIn";
-            //});
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IModuleRepository, ModuleRepository>();
