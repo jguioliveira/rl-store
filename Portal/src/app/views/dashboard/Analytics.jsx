@@ -23,37 +23,7 @@ class Dashboard1 extends Component {
 
     return (
       <Fragment>
-        <div className="pb-86 pt-30 px-30 bg-primary">
-          <ModifiedAreaChart
-            height="280px"
-            option={{
-              series: [
-                {
-                  data: [34, 45, 31, 45, 31, 43, 26, 43, 31, 45, 33, 40],
-                  type: "line"
-                }
-              ],
-              xAxis: {
-                data: [
-                  "Jan",
-                  "Feb",
-                  "Mar",
-                  "Apr",
-                  "May",
-                  "Jun",
-                  "Jul",
-                  "Aug",
-                  "Sep",
-                  "Oct",
-                  "Nov",
-                  "Dec"
-                ]
-              }
-            }}
-          ></ModifiedAreaChart>
-        </div>
-
-        <div className="analytics m-sm-30 mt--72">
+        <div className="analytics m-sm-30">
           <Grid container spacing={3}>
             <Grid item lg={8} md={8} sm={12} xs={12}>
 

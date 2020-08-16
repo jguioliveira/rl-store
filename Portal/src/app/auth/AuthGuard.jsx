@@ -12,6 +12,8 @@ class AuthGuard extends Component {
       authenticated: false,
       routes
     };
+
+    this.state.authenticated = this.getDerivedStateFromProps(props, this.state)
   }
 
   componentDidMount() {
@@ -30,7 +32,7 @@ class AuthGuard extends Component {
     return nextState.authenticated !== this.state.authenticated;
   }
 
-  static getDerivedStateFromProps(props, state) {    
+  getDerivedStateFromProps(props, state) {    
     const { location, user } = props;
     const { pathname } = location;
     const matched = state.routes.find(r => r.path === pathname);

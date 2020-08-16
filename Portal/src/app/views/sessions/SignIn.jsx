@@ -31,9 +31,8 @@ const styles = theme => ({
 
 class SignIn extends Component {
   state = {
-    email: "watson@example.com",
-    password: "testpass",
-    agreement: ""
+    email: "",
+    password: ""
   };
   handleChange = event => {
     event.persist();
@@ -57,8 +56,9 @@ class SignIn extends Component {
                   <img src="/assets/images/illustrations/dreamer.svg" alt="" />
                 </div>
               </Grid>
+              
               <Grid item lg={7} md={7} sm={7} xs={12}>
-                <div className="p-36 h-100 bg-light-gray position-relative">
+                <div className="p-36 h-100 bg-light-gray position-relative">                
                   <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
                     <TextValidator
                       className="mb-24 w-100"
@@ -85,13 +85,6 @@ class SignIn extends Component {
                       validators={["required"]}
                       errorMessages={["this field is required"]}
                     />
-                    <FormControlLabel
-                      className="mb-8"
-                      name="agreement"
-                      onChange={this.handleChange}
-                      control={<Checkbox checked />}
-                      label="I have read and agree to the terms of service."
-                    />
                     <div className="flex flex-middle mb-8">
                       <div className={classes.wrapper}>
                         <Button
@@ -100,33 +93,27 @@ class SignIn extends Component {
                           disabled={this.props.login.loading}
                           type="submit"
                         >
-                          Sign in to Enter Dashboard
+                          Sign in
                         </Button>
-                        {this.props.login.loading && (
-                          <CircularProgress
-                            size={24}
-                            className={classes.buttonProgress}
-                          />
-                        )}
+                        <Button
+                          className="text-primary"
+                          onClick={() =>
+                            this.props.history.push("/session/forgot-password")
+                          }
+                          >
+                            Forgot password?
+                        </Button>                        
                       </div>
-                      <span className="ml-16 mr-8">or</span>
-                      <Button
-                        className="capitalize"
-                        onClick={() =>
-                          this.props.history.push("/session/signup")
-                        }
-                      >
-                        Sign up
-                      </Button>
+                      {this.props.login.loading && (
+                        <CircularProgress
+                          size={24}
+                          className={classes.buttonProgress}
+                        />
+                      )}
                     </div>
-                    <Button
-                      className="text-primary"
-                      onClick={() =>
-                        this.props.history.push("/session/forgot-password")
-                      }
-                    >
-                      Forgot password?
-                    </Button>
+                    <p>
+                      {this.props.login.error.error}
+                      </p>
                   </ValidatorForm>
                 </div>
               </Grid>

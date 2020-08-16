@@ -11,17 +11,9 @@ class Auth extends Component {
   state = {};
   
   constructor(props) {
-    super(props);
-
-    // Set user if exists in local storage
-    // This is only for demo purpose
-    // You should remove this
-    this.props.setUserData(localStorageService.getItem("auth_user"));
-    
+    super(props);    
     // Check current token is valid on page load/reload
     this.checkJwtAuth();
-
-    // this.checkFirebaseAuth();
   }
 
   checkJwtAuth = () => {
@@ -32,8 +24,9 @@ class Auth extends Component {
       // Valid token
       // Set user
       this.props.setUserData(user);
-
-      // You should redirect user to Dashboard here
+      history.push({
+        pathname: "/"
+      });
       
     }).catch(err => {
       // Invalid token
@@ -42,18 +35,6 @@ class Auth extends Component {
       history.push({
         pathname: "/session/signin"
       });
-    });
-  };
-
-  checkFirebaseAuth = () => {
-    firebaseAuthService.checkAuthStatus(user => {
-      if (user) {
-        console.log(user.uid);
-        console.log(user.email);
-        console.log(user.emailVerified);
-      } else {
-        console.log("not logged in");
-      }
     });
   };
 

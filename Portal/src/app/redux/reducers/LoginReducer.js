@@ -38,9 +38,10 @@ const LoginReducer = function(state = initialState, action) {
     }
     case LOGIN_ERROR: {
       return {
+        ...state,
         success: false,
         loading: false,
-        error: action.data
+        error: action.payload.response.data
       };
     }
     default: {

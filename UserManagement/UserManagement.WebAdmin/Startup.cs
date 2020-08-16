@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace BasicAuthentication
 {
@@ -53,6 +56,14 @@ namespace BasicAuthentication
                     options.Events.OnTicketReceived = (context) =>
                     {
                         context.Properties.ExpiresUtc = DateTimeOffset.Parse(context.Properties.Items[".Token.expires_at"]);
+                        return Task.CompletedTask;
+                    };
+                    options.Events.OnCreatingTicket = (context) =>
+                    {
+                        var jwt = context.Properties.Items[".Token.access_token"];
+                        var handler = new JwtSecurityTokenHandler();
+                        var token = handler.ReadJwtToken(jwt);
+                        context.Identity.AddClaims(token.Claims);
                         return Task.CompletedTask;
                     };
                 });

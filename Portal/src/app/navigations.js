@@ -5,57 +5,31 @@ export const navigations = [
     icon: "dashboard"
   },
   {
-    name: "Forms",
-    icon: "description",
+    name: "Gerenciar Estoque",
+    icon: "format_list_bulleted",
     children: [
       {
-        name: "Basic",
-        path: "/forms/basic",
-        iconText: "B"
+        name: "Fabricante",
+        icon: "description",
+        path: "/forms/basic"
       },
       {
-        name: "Editor",
-        path: "/forms/editor",
-        iconText: "E"
-      }
-    ]
-  },
-  {
-    name: "Drag and Drop",
-    icon: "control_camera",
-    path: "/others/drag-and-drop"
-  },
-  {
-    name: "Multilevel",
-    icon: "trending_up",
-    children: [
+        name: "Categoria",
+        icon: "description",
+        path: "/forms/editor"
+      },
       {
-        name: "Level 1",
-        icon: "list",
-        children: [
-          {
-            name: "Item 1",
-            path: "/charts/victory-charts",
-            iconText: "1"
-          },
-          {
-            name: "Item 2",
-            path: "/charts/react-vis",
-            iconText: "2"
-          },
-          {
-            name: "Item 3",
-            path: "/charts/recharts",
-            iconText: "3"
-          },
-          {
-            name: "Item 4",
-            path: "/charts/echarts",
-            iconText: "4"
-          }
-        ]
+        name: "Produto",
+        icon: "description",
+        path: "/forms/basic"
       }
     ]
+  },
+  {
+    name: "Gerenciar Vendas",
+    icon: "trending_up",
+    path: "/forms/basic"
+    
   },
   {
     name: "Utilities",
@@ -188,13 +162,5 @@ export const navigations = [
         iconText: "T"
       }
     ]
-  },
-  
-  {
-    name: "Map",
-    icon: "add_location",
-    path: "/map"
-  },
-  
-  
+  }
 ];
