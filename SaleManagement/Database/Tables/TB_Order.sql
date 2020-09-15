@@ -3,8 +3,8 @@ create table TB_Order(
     CustmomerId varchar(32),
     Status tinyint,
     Total decimal(14,2)not null,
-    Created date not null,
-    Updated date not null,
+    Created datetime not null,
+    Updated datetime not null,
     PaymentForm tinyint,
     primary key(Id)
 );
