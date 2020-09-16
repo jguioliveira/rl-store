@@ -158,7 +158,43 @@ namespace SalesManagement.Api.Controllers
             return orderItem;
             
         }
-        
+
+        [HttpGet]
+        [Route("items/{id}")]
+        public OrderItem GetItemsId(string id)
+        {
+            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
+            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+
+            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Id_Select", connection);
+            mySqlCommand.Parameters.Add("@varId", MySqlDbType.String).Value = id;
+  
+            mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+            connection.Open();
+
+            MySqlDataReader tabela = mySqlCommand.ExecuteReader();
+
+            bool existeDados = tabela.Read();
+
+            OrderItem orderItem = new OrderItem();
+
+            if(existeDados)
+            {
+                
+                orderItem.OrderId = tabela.GetString("OrderId");
+                orderItem.ProductId = tabela.GetString("ProductId");
+                orderItem.UnitValue = tabela.GetDouble("UnitValue");
+                orderItem.Total = tabela.GetDouble("Total");
+                orderItem.ProductName = tabela.GetString("ProductName");
+
+               
+            }
+            connection.Close();
+            return orderItem;
+
+        }
+
         [HttpPost]
         [Route("{id}/items")]
         public void InsertItems(string id, OrderItem orderItem)
