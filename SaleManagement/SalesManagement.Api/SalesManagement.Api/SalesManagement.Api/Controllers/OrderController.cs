@@ -82,7 +82,43 @@ namespace SalesManagement.Api.Controllers
 
             return order;
         }
-        
+
+        [HttpGet]
+        [Route("id/{id}")]
+        public Order GetId(string id)
+        {
+            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
+            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+
+            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Id_Select", connection);
+            mySqlCommand.Parameters.Add("@varId", MySqlDbType.String).Value = id;
+           
+            mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+            connection.Open();
+
+            MySqlDataReader tabela = mySqlCommand.ExecuteReader();
+
+            bool existeDados = tabela.Read();
+
+            Order order = new Order();
+
+            if (existeDados)
+            {
+                order.Id = tabela.GetString("Id");
+                order.CustomerId = tabela.GetString("CustomerId");
+                order.Status = tabela.GetInt32("Status");
+                order.Total = tabela.GetDouble("Total");
+                order.Created = tabela.GetDateTime("Created");
+                order.Updated = tabela.GetDateTime("Updated");
+                order.PaymentForm = tabela.GetInt32("PaymentForm");
+            }
+          
+            connection.Close();
+
+            return order;
+        }
+
         [HttpGet]
         [Route("items/de/{dataInicial}/ate/{dataFinal}")]
         public List<OrderItem> GetItems(string dataInicial, string dataFinal)
