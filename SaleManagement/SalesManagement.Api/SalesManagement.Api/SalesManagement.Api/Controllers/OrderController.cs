@@ -147,6 +147,7 @@ namespace SalesManagement.Api.Controllers
                 OrderItem OI = new OrderItem();
                 OI.OrderId = tabela.GetString("OrderId");
                 OI.ProductId = tabela.GetString("ProductId");
+                OI.Count = tabela.GetInt16("Count");
                 OI.UnitValue = tabela.GetDouble("UnitValue");
                 OI.Total = tabela.GetDouble("Total");
                 OI.ProductName = tabela.GetString("ProductName");
@@ -160,15 +161,79 @@ namespace SalesManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("items/{id}")]
+        [Route("{id}/items")]
         public OrderItem GetItemsId(string id)
+        {
+          string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
+           MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+
+          MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Id_Select", connection);
+          mySqlCommand.Parameters.Add("@varId", MySqlDbType.String).Value = id;
+  
+          mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+           connection.Open();
+
+           MySqlDataReader tabela = mySqlCommand.ExecuteReader();
+
+           bool existeDados = tabela.Read();
+
+           OrderItem orderItem = new OrderItem();
+
+           if(existeDados)
+           {
+                
+               orderItem.OrderId = tabela.GetString("OrderId");
+               orderItem.ProductId = tabela.GetString("ProductId");
+               orderItem.Count = tabela.GetInt16("Count");
+               orderItem.UnitValue = tabela.GetDouble("UnitValue");
+               orderItem.Total = tabela.GetDouble("Total");
+               orderItem.ProductName = tabela.GetString("ProductName");
+
+               
+            }
+            connection.Close();
+            return orderItem;
+        }
+
+        [HttpPost]
+        [Route("{id}/items")]
+        public void InsertItems(string id, [FromBody] List<OrderItem> orderItem)
         {
             string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
             MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+            
+            connection.Open();
 
-            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Id_Select", connection);
+            foreach (var item in orderItem)
+            {
+                MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Insert", connection);
+                mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                mySqlCommand.Parameters.AddWithValue("varOrderId", item.OrderId);
+                mySqlCommand.Parameters.AddWithValue("varProductId", item.ProductId);
+                mySqlCommand.Parameters.AddWithValue("varCount", item.Count);
+                mySqlCommand.Parameters.AddWithValue("varUnitValue", item.UnitValue);
+                mySqlCommand.Parameters.AddWithValue("varTotal", item.Total);
+                mySqlCommand.Parameters.AddWithValue("varProductName", item.ProductName);
+
+                mySqlCommand.ExecuteNonQuery();
+            }           
+            connection.Close();
+
+        }
+
+        [HttpGet]
+        [Route("{id}/order/items")]
+        public Order GetOrder_OrderItem(string id, string productId)
+        {
+
+            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
+            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+
+            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Id_Select", connection);
             mySqlCommand.Parameters.Add("@varId", MySqlDbType.String).Value = id;
-  
+
             mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
             connection.Open();
@@ -177,47 +242,48 @@ namespace SalesManagement.Api.Controllers
 
             bool existeDados = tabela.Read();
 
-            OrderItem orderItem = new OrderItem();
+            Order order = new Order();
 
-            if(existeDados)
+            if (existeDados)
             {
-                
-                orderItem.OrderId = tabela.GetString("OrderId");
-                orderItem.ProductId = tabela.GetString("ProductId");
-                orderItem.UnitValue = tabela.GetDouble("UnitValue");
-                orderItem.Total = tabela.GetDouble("Total");
-                orderItem.ProductName = tabela.GetString("ProductName");
-
-               
+                order.Id = tabela.GetString("Id");
+                order.CustomerId = tabela.GetString("CustomerId");
+                order.Status = tabela.GetInt32("Status");
+                order.Total = tabela.GetDouble("Total");
+                order.Created = tabela.GetDateTime("Created");
+                order.Updated = tabela.GetDateTime("Updated");
+                order.PaymentForm = tabela.GetInt32("PaymentForm");
             }
             connection.Close();
-            return orderItem;
+            MySql.Data.MySqlClient.MySqlCommand mySqlCommando = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Id_Select", connection);
+            mySqlCommando.Parameters.Add("@varId", MySqlDbType.String).Value = id;
 
-        }
-
-        [HttpPost]
-        [Route("{id}/items")]
-        public void InsertItems(string id, OrderItem orderItem)
-        {
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
-            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Insert", connection);
-          
-            mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            mySqlCommando.CommandType = System.Data.CommandType.StoredProcedure;
             connection.Open();
-            mySqlCommand.Parameters.AddWithValue("varOrderId", orderItem.OrderId);
-            mySqlCommand.Parameters.AddWithValue("varProductId", orderItem.ProductId);
-            mySqlCommand.Parameters.AddWithValue("varCount", orderItem.Count);
-            mySqlCommand.Parameters.AddWithValue("varUnitValue", orderItem.UnitValue);
-            mySqlCommand.Parameters.AddWithValue("varTotal", orderItem.Total);
-            mySqlCommand.Parameters.AddWithValue("varProductName", orderItem.ProductName);
+            MySqlDataReader tabela1 = mySqlCommando.ExecuteReader();
 
-            mySqlCommand.ExecuteNonQuery();
+            OrderItem orderItem = new OrderItem();
+            order.Items = new List<OrderItem>();
+            bool existeDado = tabela1.Read();
+
+            while (existeDado)
+            {
+
+                orderItem.OrderId = tabela1.GetString("OrderId");
+                orderItem.ProductId = tabela1.GetString("ProductId");
+                orderItem.Count = tabela1.GetInt16("Count");
+                orderItem.UnitValue = tabela1.GetDouble("UnitValue");
+                orderItem.Total = tabela1.GetDouble("Total");
+                orderItem.ProductName = tabela1.GetString("ProductName");
+
+                existeDado = tabela1.Read();
+                order.Items.Add(orderItem);
+            }
             connection.Close();
 
+            return order;
         }
-        
+
         public class Order
         {
             public string Id { get; set; }
