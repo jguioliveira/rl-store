@@ -14,7 +14,7 @@ namespace SalesManagement.Api.Controllers
     public class OrderController : ControllerBase
     {
         [HttpPost]
-        public void Post(Order order)
+        public void InsertOrder(Order order)
         {
            
             string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
@@ -41,7 +41,7 @@ namespace SalesManagement.Api.Controllers
 
         [HttpGet]
         [Route("de/{dataInicial}/ate/{dataFinal}")]
-        public List<Order> Get(string dataInicial, string dataFinal)
+        public List<Order> GetListOrder(string dataInicial, string dataFinal)
         {
             var dtInicial = DateTime.Parse(dataInicial);
             var dtFinal = DateTime.Parse(dataFinal);
@@ -197,7 +197,7 @@ namespace SalesManagement.Api.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/items")]
+        [Route("{id}/insert/items")]
         public void InsertItems(string id, [FromBody] List<OrderItem> orderItem)
         {
             string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
@@ -225,7 +225,7 @@ namespace SalesManagement.Api.Controllers
 
         [HttpGet]
         [Route("{id}/order/items")]
-        public Order GetOrder_OrderItem(string id, string productId)
+        public Order GetOrder_OrderItem(string id)
         {
 
             string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
@@ -262,13 +262,13 @@ namespace SalesManagement.Api.Controllers
             connection.Open();
             MySqlDataReader tabela1 = mySqlCommando.ExecuteReader();
 
-            OrderItem orderItem = new OrderItem();
+           
             order.Items = new List<OrderItem>();
             bool existeDado = tabela1.Read();
 
             while (existeDado)
             {
-
+                OrderItem orderItem = new OrderItem();
                 orderItem.OrderId = tabela1.GetString("OrderId");
                 orderItem.ProductId = tabela1.GetString("ProductId");
                 orderItem.Count = tabela1.GetInt16("Count");
@@ -283,7 +283,66 @@ namespace SalesManagement.Api.Controllers
 
             return order;
         }
+        
+        [HttpPost]
+        [Route("fullOrder")]
+        public void InsertOrder_OrderItem(Order order)
+        {
+            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
+            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
 
+            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Insert", connection);
+
+            mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            connection.Open();
+            order.Created = DateTime.Now;
+            mySqlCommand.Parameters.AddWithValue("varId", order.Id);
+            mySqlCommand.Parameters.AddWithValue("varCustomerId", order.CustomerId);
+            mySqlCommand.Parameters.AddWithValue("varStatus", order.Status);
+            mySqlCommand.Parameters.AddWithValue("varTotal", order.Total);
+            mySqlCommand.Parameters.AddWithValue("varCreated", order.Created);
+            mySqlCommand.Parameters.AddWithValue("varUpdated", DateTime.Now);
+            mySqlCommand.Parameters.AddWithValue("varPaymentForm", order.PaymentForm);
+
+            mySqlCommand.ExecuteNonQuery();
+         
+            foreach (var item in order.Items)
+            {
+                MySql.Data.MySqlClient.MySqlCommand mySqlCommando = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Insert", connection);
+                mySqlCommando.CommandType = System.Data.CommandType.StoredProcedure;
+
+                mySqlCommando.Parameters.AddWithValue("varOrderId", item.OrderId);
+                mySqlCommando.Parameters.AddWithValue("varProductId", item.ProductId);
+                mySqlCommando.Parameters.AddWithValue("varCount", item.Count);
+                mySqlCommando.Parameters.AddWithValue("varUnitValue", item.UnitValue);
+                mySqlCommando.Parameters.AddWithValue("varTotal", item.Total);
+                mySqlCommando.Parameters.AddWithValue("varProductName", item.ProductName);
+
+                mySqlCommando.ExecuteNonQuery();
+            }
+            connection.Close();
+
+         
+        }
+
+        [HttpPut]
+         public void UpdateOrder(OrderUpdateStatusCommand ousc)
+         {
+            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
+            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+
+            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Status_Update", connection);
+            mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            connection.Open();
+
+            mySqlCommand.Parameters.AddWithValue("varId", ousc.Id);
+            mySqlCommand.Parameters.AddWithValue("varStatus", ousc.Status);
+            mySqlCommand.Parameters.AddWithValue("varUpdated", ousc.Updated);
+
+            mySqlCommand.ExecuteNonQuery();
+            connection.Close();
+        }
+        
         public class Order
         {
             public string Id { get; set; }
@@ -304,6 +363,13 @@ namespace SalesManagement.Api.Controllers
             public double UnitValue { get; set; }
             public double Total { get; set; }
             public string ProductName { get; set; }
+        }
+
+        public class OrderUpdateStatusCommand
+        {
+            public string Id { get; set; }
+            public int Status { get; set; }
+            public DateTime Updated { get; set; }
         }
     }
 }
