@@ -359,7 +359,24 @@ namespace SalesManagement.Api.Controllers
             mySqlCommand.ExecuteNonQuery();
             connection.Close();
         }
-        
+
+        [HttpDelete]
+        [Route("{id}/delete/orderitem")]
+        public void DeleteOrderItem(string Id)
+        {
+            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
+            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+
+            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Delete", connection);
+            mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            connection.Open();
+
+            mySqlCommand.Parameters.AddWithValue("varProductId", Id);
+
+            mySqlCommand.ExecuteNonQuery();
+            connection.Close();
+        }
+
         public class Order
         {
             public string Id { get; set; }
