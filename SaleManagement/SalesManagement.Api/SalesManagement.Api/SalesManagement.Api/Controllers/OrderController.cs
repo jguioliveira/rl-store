@@ -13,12 +13,18 @@ namespace SalesManagement.Api.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
+        public MySqlConnection Connection()
+        {
+            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
+            MySql.Data.MySqlClient.MySqlConnection conexao = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+
+            return conexao;
+        }
         [HttpPost]
         public void InsertOrder(Order order)
         {
-           
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+
+            MySqlConnection connection = Connection();
 
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Insert", connection);
 
@@ -46,10 +52,7 @@ namespace SalesManagement.Api.Controllers
             var dtInicial = DateTime.Parse(dataInicial);
             var dtFinal = DateTime.Parse(dataFinal);
 
-
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
+            MySqlConnection connection = Connection();
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Select", connection);
             mySqlCommand.Parameters.Add("@inicialDate", MySqlDbType.Datetime).Value = dtInicial;
             mySqlCommand.Parameters.Add("@finalDate", MySqlDbType.DateTime).Value = dtFinal;
@@ -87,9 +90,7 @@ namespace SalesManagement.Api.Controllers
         [Route("id/{id}")]
         public Order GetId(string id)
         {
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
+            MySqlConnection connection = Connection();
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Id_Select", connection);
             mySqlCommand.Parameters.Add("@varId", MySqlDbType.String).Value = id;
            
@@ -126,9 +127,7 @@ namespace SalesManagement.Api.Controllers
             var dtInicial = DateTime.Parse(dataInicial);
             var dtFinal = DateTime.Parse(dataFinal);
 
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
+            MySqlConnection connection = Connection();
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Select", connection);
             mySqlCommand.Parameters.Add("@inicialDate", MySqlDbType.Datetime).Value = dtInicial;
             mySqlCommand.Parameters.Add("@finalDate", MySqlDbType.DateTime).Value = dtFinal;
@@ -164,24 +163,23 @@ namespace SalesManagement.Api.Controllers
         [Route("{id}/items")]
         public OrderItem GetItemsId(string id)
         {
-          string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-           MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
+            MySqlConnection connection = Connection();
 
-          MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Id_Select", connection);
-          mySqlCommand.Parameters.Add("@varId", MySqlDbType.String).Value = id;
+            MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Id_Select", connection);
+            mySqlCommand.Parameters.Add("@varId", MySqlDbType.String).Value = id;
   
-          mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
-           connection.Open();
+            connection.Open();
 
-           MySqlDataReader tabela = mySqlCommand.ExecuteReader();
+            MySqlDataReader tabela = mySqlCommand.ExecuteReader();
 
-           bool existeDados = tabela.Read();
+            bool existeDados = tabela.Read();
 
-           OrderItem orderItem = new OrderItem();
+            OrderItem orderItem = new OrderItem();
 
-           if(existeDados)
-           {
+            if(existeDados)
+            {
                 
                orderItem.OrderId = tabela.GetString("OrderId");
                orderItem.ProductId = tabela.GetString("ProductId");
@@ -200,9 +198,7 @@ namespace SalesManagement.Api.Controllers
         [Route("{id}/insert/items")]
         public void InsertItems(string id, [FromBody] List<OrderItem> orderItem)
         {
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-            
+            MySqlConnection connection = Connection();
             connection.Open();
 
             foreach (var item in orderItem)
@@ -228,9 +224,7 @@ namespace SalesManagement.Api.Controllers
         public Order GetOrder_OrderItem(string id)
         {
 
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
+            MySqlConnection connection = Connection();
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Id_Select", connection);
             mySqlCommand.Parameters.Add("@varId", MySqlDbType.String).Value = id;
 
@@ -288,9 +282,7 @@ namespace SalesManagement.Api.Controllers
         [Route("fullOrder")]
         public void InsertOrder_OrderItem(Order order)
         {
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
+            MySqlConnection connection = Connection();
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Insert", connection);
 
             mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
@@ -328,9 +320,7 @@ namespace SalesManagement.Api.Controllers
         [HttpPut]
          public void UpdateOrder(OrderUpdateStatusCommand ousc)
          {
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
+            MySqlConnection connection = Connection();
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Status_Update", connection);
             mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
             connection.Open();
@@ -347,9 +337,7 @@ namespace SalesManagement.Api.Controllers
         [Route("{id}/delete")]
         public void DeleteOrder(string Id)
         {
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
+            MySqlConnection connection = Connection();
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_Order_Delete", connection);
             mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
             connection.Open();
@@ -364,9 +352,7 @@ namespace SalesManagement.Api.Controllers
         [Route("{id}/delete/orderitem")]
         public void DeleteOrderItem(string Id)
         {
-            string stringDeConexao = "Server=localhost;Database=rlsalesdb;Uid=root;Pwd=123456;";
-            MySql.Data.MySqlClient.MySqlConnection connection = new MySql.Data.MySqlClient.MySqlConnection(stringDeConexao);
-
+            MySqlConnection connection = Connection();
             MySql.Data.MySqlClient.MySqlCommand mySqlCommand = new MySql.Data.MySqlClient.MySqlCommand("PR_TB_OrderItem_Delete", connection);
             mySqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
             connection.Open();
