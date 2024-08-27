@@ -1,0 +1,21 @@
+{
+	"info": {
+		"_postman_id": "7a26bef0-51f6-41aa-b02d-fbe14c387172",
+		"name": "SalesManagement",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "InsertOrder",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
