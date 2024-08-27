@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using InventoryManagement.Domain.Commands;
 using InventoryManagement.Domain.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Asp.Versioning;
 
 namespace InventoryManagement.Api.Controllers.v1
 {
