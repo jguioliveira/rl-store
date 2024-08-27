@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Asp.Versioning;
 using InventoryManagement.Domain.Commands;
 using InventoryManagement.Domain.Handlers;
 using Microsoft.AspNetCore.Authorization;

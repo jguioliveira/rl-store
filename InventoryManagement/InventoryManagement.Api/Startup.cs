@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using InventoryManagement.Api.Requirements;
 using InventoryManagement.Domain.Commands;
 using InventoryManagement.Domain.Handlers;
@@ -44,9 +45,17 @@ namespace InventoryManagement.Api
 
             services.AddApiVersioning(options =>
             {
-                options.ReportApiVersions = true;
-                options.AssumeDefaultVersionWhenUnspecified = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ReportApiVersions = true;
+                options.ApiVersionReader = ApiVersionReader.Combine(
+                    new UrlSegmentApiVersionReader(),
+                    new HeaderApiVersionReader("X-Api-Version")
+                );
+            }).AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
             });
 
             services.AddSwaggerGen(s =>
@@ -103,7 +112,6 @@ namespace InventoryManagement.Api
             }
 
             app.UseRouting();
-            app.UseApiVersioning();
             app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI(c =>

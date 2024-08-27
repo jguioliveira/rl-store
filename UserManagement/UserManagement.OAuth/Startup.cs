@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +15,8 @@ namespace UserManagement.OAuth
 {
     public class Startup
     {
+        readonly string PortalAllowSpecificOrigins = "_portalAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -35,13 +38,25 @@ namespace UserManagement.OAuth
                     {
                         ValidIssuer = settings.OAuthSettings.Issuer,
                         ValidAudience = settings.OAuthSettings.Audience,
-                        //TODO: Testar
-                        //ValidateIssuerSigningKey = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidateLifetime = true,
+                        RequireExpirationTime = true,
                         IssuerSigningKey = new SymmetricSecurityKey(secret)
                     };
                 });
 
             services.AddControllersWithViews();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: PortalAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:3000")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod();
+                                  });
+            });
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserTokenRepository, UserTokenRepository>();
@@ -66,6 +81,7 @@ namespace UserManagement.OAuth
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseCors(PortalAllowSpecificOrigins);
             app.UseEndpoints(endpoints => 
             {
                 endpoints.MapDefaultControllerRoute();

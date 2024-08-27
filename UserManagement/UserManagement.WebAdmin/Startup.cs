@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace BasicAuthentication
 {
@@ -40,7 +43,7 @@ namespace BasicAuthentication
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
-                    //options.ExpireTimeSpan = TimeSpan.FromTicks(DateTime.Now.AddMinutes(15).Ticks);
+                    options.LoginPath = "/Account";
                 })
                 .AddOAuth("UserManagementOAuth", options =>
                 {
@@ -55,18 +58,15 @@ namespace BasicAuthentication
                         context.Properties.ExpiresUtc = DateTimeOffset.Parse(context.Properties.Items[".Token.expires_at"]);
                         return Task.CompletedTask;
                     };
+                    options.Events.OnCreatingTicket = (context) =>
+                    {
+                        var jwt = context.Properties.Items[".Token.access_token"];
+                        var handler = new JwtSecurityTokenHandler();
+                        var token = handler.ReadJwtToken(jwt);
+                        context.Identity.AddClaims(token.Claims);
+                        return Task.CompletedTask;
+                    };
                 });
-
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = "BasicAuth";
-            //    options.RequireAuthenticatedSignIn = true;
-            //})
-            //.AddCookie("BasicAuth", options =>
-            //{
-            //    options.Cookie.Name = "BasicAuth.Cookie";
-            //    options.LoginPath = "/Home/SignIn";
-            //});
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IModuleRepository, ModuleRepository>();

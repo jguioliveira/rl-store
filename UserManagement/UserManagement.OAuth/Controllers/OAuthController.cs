@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -84,6 +85,30 @@ namespace UserManagement.OAuth.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> PortalAuthenticate([FromBody]UserSignIn userSignIn)
+        {
+            var user = await _userRepository.GetAsync(userSignIn.Email);
+
+            if ((user is null) || !user.CheckPassword(userSignIn.Password))
+            {
+                return Unauthorized(new { error = "Invalid username or password." });
+            }
+
+            UserToken userToken = new UserToken(user.Email, "frontend", DateTime.Now.AddMinutes(5).Ticks);
+            await _userTokenRepository.CreateAsync(userToken);
+
+            dynamic token = await TokenGenerate(userToken);
+
+            return Ok(
+                new 
+                {
+                    token.access_token,
+                    token.token_type,
+                    user = new { email = user.Email, firstName = user.FirstName, lastName = user.LastName, groups = user.Groups } 
+                });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Token(
             string grant_type,
             string code,
@@ -104,48 +129,69 @@ namespace UserManagement.OAuth.Controllers
                 return BadRequest(new { error = "invalid_request" });
             }
             else
-            {
-                var user = await _userRepository.GetAsync(userToken.Email);
-                List<Claim> claims = new List<Claim>()
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim(ClaimTypes.Role, user.Groups.Aggregate((a, x) => a + ", " + x))
-                };
-
-                var secret = Encoding.UTF8.GetBytes(_appSettings.OAuthSettings.Secret);
-                var expirationToken = DateTime.Now.AddSeconds(15);
-
-                JwtSecurityToken token = new JwtSecurityToken(
-                    _appSettings.OAuthSettings.Issuer,
-                    _appSettings.OAuthSettings.Audience,
-                    claims,
-                    DateTime.Now,
-                    expirationToken,
-                    new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256));
-
-                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-
-                var access_token = handler.WriteToken(token);
-                userToken.SetToken(access_token, expirationToken.Ticks);
-                await _userTokenRepository.UpdateAsync(userToken.Id, userToken);
-
-                return Ok(
-                    new 
-                    { 
-                        access_token,
-                        token_type = "bearer",
-                        expires_in = (int)(expirationToken - DateTime.Now).TotalSeconds,
-                        refresh_token = ""
-                    }
-                );
+            {                
+                var objectToken = await TokenGenerate(userToken);
+                return Ok(objectToken);
             }            
         }
 
         [Authorize]
         [HttpGet]
-        public IActionResult Validate()
+        public async Task<IActionResult> Validate()
         {
-            return Ok();
+            var access_token = await HttpContext.GetTokenAsync("access_token");
+            var email = HttpContext.User.Identity.Name;
+
+            if(!string.IsNullOrEmpty(email) && HttpContext.User.Identity.IsAuthenticated)
+            {
+                var user = await _userRepository.GetAsync(email);
+
+                return Ok(
+                     new
+                     {
+                         access_token,
+                         token_type = "bearer",
+                         user = new { email = user.Email, firstName = user.FirstName, lastName = user.LastName, groups = user.Groups }
+                     });
+            }
+
+            return BadRequest("invalid token.");
+        }
+
+        private async Task<object> TokenGenerate(UserToken userToken)
+        {
+            var user = await _userRepository.GetAsync(userToken.Email);
+            List<Claim> claims = new List<Claim>()
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Role, user.Groups.Aggregate((a, x) => a + ", " + x))
+                };
+
+            var secret = Encoding.UTF8.GetBytes(_appSettings.OAuthSettings.Secret);
+            var expirationToken = DateTime.Now.AddDays(1);
+
+            JwtSecurityToken token = new JwtSecurityToken(
+                _appSettings.OAuthSettings.Issuer,
+                _appSettings.OAuthSettings.Audience,
+                claims,
+                DateTime.Now,
+                expirationToken,
+                new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256));
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+
+            var access_token = handler.WriteToken(token);
+            userToken.SetToken(access_token, expirationToken.Ticks);
+            await _userTokenRepository.UpdateAsync(userToken.Id, userToken);
+
+            return new
+            {
+                access_token,
+                token_type = "bearer",
+                expires_in = (int)(expirationToken - DateTime.Now).TotalSeconds,
+                refresh_token = ""
+            };
         }
     }
 }
